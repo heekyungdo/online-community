@@ -1,0 +1,11 @@
+.ul {
+  display: flex;
+}
+
+.navItems {
+  list-style: none;
+}
+
+.navItem {
+  text-decoration: none;
+}
