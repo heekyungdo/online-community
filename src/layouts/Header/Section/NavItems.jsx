@@ -16,7 +16,9 @@ const NavItems = () => {
         {routes.map((route) => {
           return (
             <li key={route.name} className={styles.navItems}>
-              <Link className={styles.navItem}>{route.name}</Link>
+              <Link to={route.to} className={styles.navItem}>
+                {route.name}
+              </Link>
             </li>
           );
         })}
