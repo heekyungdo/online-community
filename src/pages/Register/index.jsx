@@ -27,7 +27,6 @@ const Register = () => {
   };
 
   const onSubmit = () => {
-    console.log(1);
     reset();
   };
 
@@ -71,7 +70,7 @@ const Register = () => {
           <div className={styles.inputBox}>
             <label htmlFor="password"></label>
             <input
-              type="text"
+              type="password"
               id="password"
               placeholder="비밀번호"
               {...register("password", validationPassword)}
