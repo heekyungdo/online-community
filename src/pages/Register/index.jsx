@@ -14,6 +14,10 @@ const Register = () => {
     required: "필수 필드입니다.",
   };
 
+  const validationEmail = {
+    required: "필수 필드입니다.",
+  };
+
   const validationName = {
     required: "필수 필드입니다.",
   };
@@ -26,7 +30,13 @@ const Register = () => {
     },
   };
 
-  const onSubmit = () => {
+  const onSubmit = ({ id, email, name, password }) => {
+    const body = {
+      id,
+      email,
+      name,
+      password,
+    };
     reset();
   };
 
@@ -44,6 +54,22 @@ const Register = () => {
               {...register("id", validationId)}
             />
             {errors?.id && (
+              <div>
+                <span className={styles.validationError}>
+                  {errors.id.message}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className={styles.inputBox}>
+            <label htmlFor="email"></label>
+            <input
+              type="email"
+              id="email"
+              placeholder="이메일"
+              {...register("email", validationEmail)}
+            />
+            {errors?.email && (
               <div>
                 <span className={styles.validationError}>
                   {errors.id.message}
