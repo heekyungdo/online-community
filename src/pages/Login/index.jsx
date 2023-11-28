@@ -22,7 +22,11 @@ const Login = () => {
     },
   };
 
-  const onSubmit = () => {
+  const onSubmit = ({ id, password }) => {
+    const body = {
+      id,
+      password,
+    };
     reset();
   };
 

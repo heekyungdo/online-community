@@ -7,10 +7,18 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Community from "./pages/Community";
 import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Layout() {
   return (
     <div>
+      <ToastContainer
+        position="bottom-right"
+        theme="light"
+        pauseOnHover
+        autoClose={1500}
+      />
       <Header />
       <main className="contents">
         <Outlet />

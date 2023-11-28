@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import styles from "./register.module.css";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../store/thunkFunctions";
 
 const Register = () => {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -10,15 +14,7 @@ const Register = () => {
     reset,
   } = useForm();
 
-  const validationId = {
-    required: "필수 필드입니다.",
-  };
-
   const validationEmail = {
-    required: "필수 필드입니다.",
-  };
-
-  const validationName = {
     required: "필수 필드입니다.",
   };
 
@@ -30,13 +26,14 @@ const Register = () => {
     },
   };
 
-  const onSubmit = ({ id, email, name, password }) => {
+  const onSubmit = ({ email, password }) => {
     const body = {
-      id,
       email,
-      name,
       password,
     };
+
+    dispatch(registerUser(body));
+
     reset();
   };
 
@@ -45,22 +42,6 @@ const Register = () => {
       <div className={styles.register}>
         <h3>회원가입</h3>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-          <div className={styles.inputBox}>
-            <label htmlFor="id"></label>
-            <input
-              type="text"
-              id="id"
-              placeholder="아이디"
-              {...register("id", validationId)}
-            />
-            {errors?.id && (
-              <div>
-                <span className={styles.validationError}>
-                  {errors.id.message}
-                </span>
-              </div>
-            )}
-          </div>
           <div className={styles.inputBox}>
             <label htmlFor="email"></label>
             <input
@@ -73,22 +54,6 @@ const Register = () => {
               <div>
                 <span className={styles.validationError}>
                   {errors.id.message}
-                </span>
-              </div>
-            )}
-          </div>
-          <div className={styles.inputBox}>
-            <label htmlFor="name"></label>
-            <input
-              type="text"
-              id="name"
-              placeholder="이름"
-              {...register("name", validationName)}
-            />
-            {errors?.name && (
-              <div>
-                <span className={styles.validationError}>
-                  {errors.name.message}
                 </span>
               </div>
             )}
