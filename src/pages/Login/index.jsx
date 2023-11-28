@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./login.module.css";
 import { useForm } from "react-hook-form";
+import { loginUser } from "../../store/thunkFunctions";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const {
@@ -10,7 +12,9 @@ const Login = () => {
     reset,
   } = useForm();
 
-  const validationId = {
+  const dispatch = useDispatch();
+
+  const validationEmail = {
     required: "필수 필드입니다.",
   };
 
@@ -22,11 +26,14 @@ const Login = () => {
     },
   };
 
-  const onSubmit = ({ id, password }) => {
+  const onSubmit = ({ email, password }) => {
     const body = {
-      id,
+      email,
       password,
     };
+
+    dispatch(loginUser(body));
+
     reset();
   };
 
@@ -36,17 +43,17 @@ const Login = () => {
         <h3>로그인</h3>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.inputBox}>
-            <label htmlFor="id"></label>
+            <label htmlFor="email"></label>
             <input
-              type="text"
-              id="id"
-              placeholder="아이디"
-              {...register("id", validationId)}
+              type="email"
+              id="email"
+              placeholder="이메일"
+              {...register("email", validationEmail)}
             />
-            {errors?.id && (
+            {errors?.email && (
               <div>
                 <span className={styles.validationError}>
-                  {errors.id.message}
+                  {errors.email.message}
                 </span>
               </div>
             )}

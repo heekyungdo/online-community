@@ -53,7 +53,7 @@ const Register = () => {
             {errors?.email && (
               <div>
                 <span className={styles.validationError}>
-                  {errors.id.message}
+                  {errors.email.message}
                 </span>
               </div>
             )}
