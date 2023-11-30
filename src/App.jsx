@@ -10,7 +10,11 @@ import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { authUser } from "./store/thunkFunctions";
+import { sessionCheck } from "./store/userSlice";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import app from "./utils/firebase";
+
+const auth = getAuth(app);
 
 function Layout() {
   return (
@@ -36,11 +40,29 @@ function App() {
   const isAuth = useSelector((state) => state.user?.isAuth);
 
   useEffect(() => {
-    console.log(isAuth);
-    if (isAuth) {
-      dispatch(authUser());
-    }
-  }, [dispatch, pathname, isAuth]);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // 로그인이 되어 있으면 로그인되어 있는 user정보 담기.
+        dispatch(
+          sessionCheck({
+            id: user.uid,
+            email: user.email,
+            isAuth: true,
+          })
+        );
+      } else {
+        dispatch(
+          sessionCheck({
+            id: "",
+            email: "",
+            isAuth: false,
+          })
+        );
+      }
+    });
+  }, [isAuth, pathname, dispatch]);
+
+  console.log(useSelector((state) => state.user?.userData.email));
 
   return (
     <>

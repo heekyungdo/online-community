@@ -1,10 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  registerUser,
-  loginUser,
-  authUser,
-  logoutUser,
-} from "./thunkFunctions";
+import { registerUser, loginUser, logoutUser } from "./thunkFunctions";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +17,11 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // standard reducer logic, with auto-generated action types per reducer
+    sessionCheck: (state, action) => {
+      state.userData.id = action.payload.uid;
+      state.userData.email = action.payload.email;
+      state.isAuth = false;
+    },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -46,7 +45,6 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isAuth = true;
-        console.log(action);
         state.userData.id = action.payload.uid;
         state.userData.email = action.payload.email;
       })
@@ -54,22 +52,6 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
         toast.error(action.payload);
-      })
-      .addCase(authUser.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(authUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-        console.log("auth", action.reloadUserInfo);
-        // state.userData.id = action.reloadUserInfo.localId;
-        // state.userData.email = action.reloadUserInfo.email;
-        state.isAuth = true;
-      })
-      .addCase(authUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-        state.userData = initialState.userData;
-        state.isAuth = false;
       })
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
@@ -86,4 +68,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { sessionCheck } = userSlice.actions;
 export default userSlice.reducer;
