@@ -1,8 +1,77 @@
 import React, { useState } from "react";
-import styles from "./register.module.css";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../store/thunkFunctions";
+import styled from "styled-components";
+
+const RegisterWrapper = styled.div`
+  text-align: center;
+  border: 1px solid lightgray;
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 3px 2px 5px 3px lightgray;
+  border-radius: 5px;
+  padding: 25px 0;
+`;
+
+const RegisterForm = styled.form`
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+`;
+
+const RegisterInputBox = styled.div`
+  margin: 30px 0;
+  width: 100%;
+`;
+
+const RegisterInput = styled.input`
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  border: none;
+  padding: 15px 0 15px 15px;
+  width: 100%;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #d2d2d2;
+  }
+`;
+const ValidationError = styled.span`
+  color: #c63d2f;
+  font-size: 13px;
+  display: flex;
+  margin: 5px 0 0 10px;
+`;
+
+const BtnWrapper = styled.div`
+  margin-top: 40px;
+
+  button {
+    background-color: #bca37f;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border: 1px solid #bca37f;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 15px;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+`;
+
+const GoLoginWrapper = styled.p`
+  margin-top: 15px;
+  font-size: 13px;
+
+  a {
+    color: black;
+    opacity: 0.5;
+  }
+`;
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -39,12 +108,12 @@ const Register = () => {
 
   return (
     <section>
-      <div className={styles.register}>
+      <RegisterWrapper>
         <h3>회원가입</h3>
-        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-          <div className={styles.inputBox}>
+        <RegisterForm onSubmit={handleSubmit(onSubmit)}>
+          <RegisterInputBox>
             <label htmlFor="email"></label>
-            <input
+            <RegisterInput
               type="email"
               id="email"
               placeholder="이메일"
@@ -52,15 +121,13 @@ const Register = () => {
             />
             {errors?.email && (
               <div>
-                <span className={styles.validationError}>
-                  {errors.email.message}
-                </span>
+                <ValidationError>{errors.email.message}</ValidationError>
               </div>
             )}
-          </div>
-          <div className={styles.inputBox}>
+          </RegisterInputBox>
+          <RegisterInputBox>
             <label htmlFor="password"></label>
-            <input
+            <RegisterInput
               type="password"
               id="password"
               placeholder="비밀번호"
@@ -68,20 +135,18 @@ const Register = () => {
             />
             {errors?.password && (
               <div>
-                <span className={styles.validationError}>
-                  {errors.password.message}
-                </span>
+                <ValidationError>{errors.password.message}</ValidationError>
               </div>
             )}
-          </div>
-          <div className={styles.button}>
+          </RegisterInputBox>
+          <BtnWrapper>
             <button type="submit">회원가입</button>
-          </div>
-          <p className={styles.goLogin}>
+          </BtnWrapper>
+          <GoLoginWrapper>
             아이디가 있다면? <a href="/login">로그인</a>
-          </p>
-        </form>
-      </div>
+          </GoLoginWrapper>
+        </RegisterForm>
+      </RegisterWrapper>
     </section>
   );
 };

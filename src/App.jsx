@@ -6,15 +6,21 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Community from "./pages/Community";
-import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { sessionCheck } from "./store/userSlice";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import app from "./utils/firebase";
+import styled from "styled-components";
 
 const auth = getAuth(app);
+
+const Contents = styled.main`
+  max-width: 1420px;
+  padding: 0 50px;
+  margin: 0 auto;
+`;
 
 function Layout() {
   return (
@@ -26,9 +32,9 @@ function Layout() {
         autoClose={1500}
       />
       <Header />
-      <main className="contents">
+      <Contents>
         <Outlet />
-      </main>
+      </Contents>
       <Footer />
     </div>
   );

@@ -1,20 +1,35 @@
 import React from "react";
 import NavItems from "./Section/NavItems";
-import styles from "./header.module.css";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0 auto 30px;
+  color: #bf4f74;
+`;
+
+const Logo = styled.p`
+  font-size: 1.5em;
+`;
 
 const Header = () => {
   return (
     <header>
-      <div className={styles.header}>
+      <Wrapper>
         <div>
           {" "}
-          <Link to="/">GOSSIP</Link>
+          <Logo>
+            <Link to="/">GOSSIP</Link>
+          </Logo>
         </div>
         <div>
           <NavItems />
         </div>
-      </div>
+      </Wrapper>
     </header>
   );
 };

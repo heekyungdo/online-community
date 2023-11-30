@@ -1,11 +1,19 @@
 import React from "react";
-import styles from "./footer.module.css";
+import styled from "styled-components";
+
+const FooterWrapper = styled.footer`
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  border-top: 1px solid lightgray;
+  text-align: center;
+`;
 
 const Footer = () => {
   return (
-    <footer className={styles.footer}>
+    <FooterWrapper>
       <p>Copyright © Gossip pan All Rights reserved.</p>
-    </footer>
+    </FooterWrapper>
   );
 };
 

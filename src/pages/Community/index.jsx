@@ -1,21 +1,40 @@
 import React from "react";
-import styles from "./community.module.css";
+import styled from "styled-components";
+
+const NoticeWrapper = styled.div`
+  border: 1px solid #dbdada;
+`;
+const NoticeTitle = styled.div`
+  border-bottom: 1px solid #dbdada;
+  background-color: lightblue;
+  padding: 7px;
+`;
+const NoticeDes = styled.div`
+  padding: 7px;
+`;
+const MainTable = styled.div`
+  margin: 50px 0 0;
+`;
+
+const Table = styled.table`
+  width: 100%;
+`;
 
 const Community = () => {
   return (
     <div>
-      <div className={styles.notice}>
-        <div className={styles.title}>
+      <NoticeWrapper>
+        <NoticeTitle>
           <h5>자유게시판입니다.</h5>
-        </div>
-        <div className={styles.noticeDes}>
+        </NoticeTitle>
+        <NoticeDes>
           <p>미풍양속을 해치지 않는 범위 내에서 자유롭게 작성해주세요.</p>
-        </div>
-      </div>
-      <div className={styles.mainTable}>
-        <table className={styles.table}>
+        </NoticeDes>
+      </NoticeWrapper>
+      <MainTable>
+        <Table>
           <thead>
-            <tr className={styles.tableTitle}>
+            <tr>
               <th>번호</th>
               <th>글쓴이</th>
               <th>제목</th>
@@ -28,8 +47,8 @@ const Community = () => {
               <td>dfsd</td>
             </tr>
           </tbody>
-        </table>
-      </div>
+        </Table>
+      </MainTable>
     </div>
   );
 };

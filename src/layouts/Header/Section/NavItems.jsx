@@ -1,8 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styles from "./nav_items.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../../store/thunkFunctions";
+import styled from "styled-components";
+
+const MenuWrapper = styled.ul`
+  display: flex;
+`;
+
+const MenuList = styled.li`
+  list-style: none;
+`;
+const Menu = styled.p`
+  text-decoration: none;
+`;
 
 const NavItems = () => {
   const dispatch = useDispatch();
@@ -21,28 +32,30 @@ const NavItems = () => {
 
   return (
     <div>
-      <ul className={styles.ul}>
+      <MenuWrapper>
         {routes.map((route) => {
           if (isAuth !== route.auth) return null;
           if (route.name === "로그아웃") {
             return (
-              <li key={route.name} className={styles.navItems}>
-                <Link onClick={handleLogout} className={styles.navItem}>
-                  {route.name}
-                </Link>
-              </li>
+              <MenuList key={route.name}>
+                <Menu>
+                  {" "}
+                  <Link onClick={handleLogout}>{route.name}</Link>
+                </Menu>
+              </MenuList>
             );
           } else {
             return (
-              <li key={route.name} className={styles.navItems}>
-                <Link to={route.to} className={styles.navItem}>
-                  {route.name}
-                </Link>
-              </li>
+              <MenuList key={route.name}>
+                <Menu>
+                  {" "}
+                  <Link to={route.to}>{route.name}</Link>
+                </Menu>
+              </MenuList>
             );
           }
         })}
-      </ul>
+      </MenuWrapper>
     </div>
   );
 };
