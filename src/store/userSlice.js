@@ -18,9 +18,8 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     sessionCheck: (state, action) => {
-      state.userData.id = action.payload.uid;
-      state.userData.email = action.payload.email;
-      state.isAuth = false;
+      state.id = action.payload.uid;
+      state.email = action.payload.email;
     },
   },
   extraReducers: (builder) => {

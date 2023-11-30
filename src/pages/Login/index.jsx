@@ -37,13 +37,8 @@ const Login = () => {
     reset();
   };
 
-  const logout = () => {
-    dispatch(logoutUser());
-  };
-
   return (
     <section>
-      <button onClick={logout}>로그아웃</button>
       <div className={styles.login}>
         <h3>로그인</h3>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>

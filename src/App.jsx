@@ -62,8 +62,6 @@ function App() {
     });
   }, [isAuth, pathname, dispatch]);
 
-  console.log(useSelector((state) => state.user?.userData.email));
-
   return (
     <>
       <Routes>
