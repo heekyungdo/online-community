@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const NoticeWrapper = styled.div`
   border: 1px solid #dbdada;
@@ -20,7 +21,7 @@ const Table = styled.table`
   width: 100%;
 `;
 
-const Community = () => {
+const Community = ({ isAuth }) => {
   return (
     <div>
       <NoticeWrapper>
@@ -31,6 +32,7 @@ const Community = () => {
           <p>미풍양속을 해치지 않는 범위 내에서 자유롭게 작성해주세요.</p>
         </NoticeDes>
       </NoticeWrapper>
+      <div>{isAuth ? <button>글쓰기</button> : null}</div>
       <MainTable>
         <Table>
           <thead>
@@ -51,6 +53,10 @@ const Community = () => {
       </MainTable>
     </div>
   );
+};
+
+Community.propTypes = {
+  isAuth: PropTypes.bool,
 };
 
 export default Community;
