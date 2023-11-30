@@ -21,7 +21,7 @@ const auth = getAuth(app);
 
 const Contents = styled.main`
   max-width: 1420px;
-  padding: 0 50px;
+  padding: 70px 50px;
   margin: 0 auto;
 `;
 
@@ -76,7 +76,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="/board/update" element={<Detail />} />
+          <Route path="/board/update" element={<Update />} />
           <Route element={<NotAuthRoutes isAuth={isAuth} />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

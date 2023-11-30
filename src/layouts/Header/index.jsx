@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin: 0 auto 30px;
+  margin: 0 auto;
   color: #bf4f74;
 `;
 

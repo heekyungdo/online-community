@@ -1,18 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import Notice from "../../components/Notice";
 
-const NoticeWrapper = styled.div`
-  border: 1px solid #dbdada;
-`;
-const NoticeTitle = styled.div`
-  border-bottom: 1px solid #dbdada;
-  background-color: lightblue;
-  padding: 7px;
-`;
-const NoticeDes = styled.div`
-  padding: 7px;
-`;
 const MainTable = styled.div`
   margin: 50px 0 0;
 `;
@@ -21,18 +12,39 @@ const Table = styled.table`
   width: 100%;
 `;
 
+const Bottom = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-top: 40px;
+
+  label {
+    margin-right: 7px;
+  }
+`;
+
+const BtnWrapper = styled.div`
+  margin-left: 20px;
+
+  button {
+    padding: 5px 10px;
+    font-weight: bold;
+  }
+`;
+const Pagination = styled.div`
+  text-align: right;
+`;
 const Community = ({ isAuth }) => {
+  const list = [
+    { key: 1, value: "5개" },
+    { key: 2, value: "10개" },
+    { key: 3, value: "15개" },
+    { key: 4, value: "20개" },
+  ];
+
   return (
     <div>
-      <NoticeWrapper>
-        <NoticeTitle>
-          <h5>자유게시판입니다.</h5>
-        </NoticeTitle>
-        <NoticeDes>
-          <p>미풍양속을 해치지 않는 범위 내에서 자유롭게 작성해주세요.</p>
-        </NoticeDes>
-      </NoticeWrapper>
-      <div>{isAuth ? <button>글쓰기</button> : null}</div>
+      <Notice />
       <MainTable>
         <Table>
           <thead>
@@ -51,6 +63,28 @@ const Community = ({ isAuth }) => {
           </tbody>
         </Table>
       </MainTable>
+      <Bottom>
+        <div>
+          <label htmlFor="">목록수</label>
+          <select>
+            {list.map((item) => {
+              return (
+                <option key={item.key} value={item.key}>
+                  {item.value}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <BtnWrapper>
+          {isAuth ? (
+            <button>
+              <Link to={"/board/update"}>글쓰기</Link>
+            </button>
+          ) : null}
+        </BtnWrapper>
+      </Bottom>
+      <Pagination></Pagination>
     </div>
   );
 };
