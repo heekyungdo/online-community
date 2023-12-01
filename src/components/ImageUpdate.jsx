@@ -53,7 +53,7 @@ const ImageUpdate = ({ images, onImageChange }) => {
       });
     });
   };
-
+  console.log(images);
   return (
     <Wrapper>
       <ImageList>
