@@ -56,6 +56,7 @@ function App() {
           sessionCheck({
             id: user.uid,
             email: user.email,
+            name: user.name,
             isAuth: true,
           })
         );
@@ -64,6 +65,7 @@ function App() {
           sessionCheck({
             id: "",
             email: "",
+            name: "",
             isAuth: false,
           })
         );

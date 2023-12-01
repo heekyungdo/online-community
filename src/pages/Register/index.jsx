@@ -87,6 +87,10 @@ const Register = () => {
     required: "필수 필드입니다.",
   };
 
+  const validationName = {
+    required: "필수 필드입니다.",
+  };
+
   const validationPassword = {
     required: "필수 필드입니다.",
     minLength: {
@@ -95,10 +99,11 @@ const Register = () => {
     },
   };
 
-  const onSubmit = ({ email, password }) => {
+  const onSubmit = ({ email, name, password }) => {
     const body = {
       email,
       password,
+      name,
     };
 
     dispatch(registerUser(body));
@@ -122,6 +127,20 @@ const Register = () => {
             {errors?.email && (
               <div>
                 <ValidationError>{errors.email.message}</ValidationError>
+              </div>
+            )}
+          </RegisterInputBox>
+          <RegisterInputBox>
+            <label htmlFor="name"></label>
+            <RegisterInput
+              type="text"
+              id="name"
+              placeholder="이름"
+              {...register("name", validationName)}
+            />
+            {errors?.name && (
+              <div>
+                <ValidationError>{errors.name.message}</ValidationError>
               </div>
             )}
           </RegisterInputBox>

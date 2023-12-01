@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Notice from "../../components/Notice";
 import styled from "styled-components";
 import ImageUpdate from "../../components/ImageUpdate";
+import { useSelector } from "react-redux";
 
 const TitleWrapper = styled.div`
   margin: 30px 0 10px;
@@ -44,11 +45,63 @@ const SecondBtn = styled.button`
   border-radius: 4px;
   cursor: pointer;
 `;
+
 const Update = () => {
+  const [post, setPost] = useState({
+    title: "",
+    description: "",
+    images: [],
+  });
+
+  const userInfo = useSelector((state) => state.user?.userData);
+
+  let today = new Date();
+  let today_ts = Date.parse(today);
+  let yesterday_ts = today_ts - 60 * 60 * 24 * 1000;
+  let yesterday = new Date(yesterday_ts);
+
+  let year = today.getFullYear();
+  let month = today.getMonth() + 1;
+  let date = today.getDate();
+  let past = `${year}/${month < 10 ? "0" + month : month}/${
+    date < 10 ? "0" + date : date
+  }`;
+  let hour = today.getHours();
+  let min = today.getMinutes();
+  let sec = today.getSeconds();
+  let time = `${hour < 10 ? "0" + hour : hour}/${min < 10 ? "0" + min : min}/${
+    sec < 10 ? "0" + sec : sec
+  }`;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const body = {
+      writer: userInfo.name,
+      date: yesterday !== today ? past : time,
+      ...post,
+    };
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPost((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleImages = (newImages) => {
+    setPost((prevState) => ({
+      ...prevState,
+      images: newImages,
+    }));
+  };
+
   return (
     <div>
       <Notice />
-      <form>
+      <form onSubmit={handleSubmit}>
         <TitleWrapper>
           <label htmlFor="title"></label>
           <input
@@ -56,13 +109,20 @@ const Update = () => {
             id="title"
             name="title"
             placeholder="제목을 입력해주세요"
+            value={post.title}
+            onChange={handleChange}
           />
         </TitleWrapper>
         <div>
           <label htmlFor="des"></label>
-          <TextArea id="des" name="des"></TextArea>
+          <TextArea
+            id="des"
+            name="des"
+            value={post.description}
+            onChange={handleChange}
+          ></TextArea>
         </div>
-        <ImageUpdate />
+        <ImageUpdate images={post.images} onImageChange={handleImages} />
       </form>
       <ButtonGroup>
         <FirstBtn>취소</FirstBtn>

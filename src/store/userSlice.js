@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { registerUser, loginUser, logoutUser } from "./thunkFunctions";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 const initialState = {
   userData: {
     id: "",
     email: "",
+    name: "",
   },
   isAuth: false,
   isLoading: false,
@@ -20,6 +20,7 @@ const userSlice = createSlice({
     sessionCheck: (state, action) => {
       state.id = action.payload.uid;
       state.email = action.payload.email;
+      state.name = action.payload.displayName;
     },
   },
   extraReducers: (builder) => {
@@ -29,7 +30,7 @@ const userSlice = createSlice({
         // Add user to the state array
         state.isLoading = true;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
         toast.success("회원가입에 성공했습니다.");
       })
@@ -46,6 +47,7 @@ const userSlice = createSlice({
         state.isAuth = true;
         state.userData.id = action.payload.uid;
         state.userData.email = action.payload.email;
+        state.userData.name = action.payload.displayName;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;

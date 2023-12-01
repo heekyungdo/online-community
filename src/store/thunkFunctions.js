@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import app from "../utils/firebase";
 
@@ -18,6 +19,8 @@ export const registerUser = createAsyncThunk(
         body.email,
         body.password
       );
+      // 이름이나 그 외 정보 입력하려면 가입 후 프로필을 업데이트 해줘야한다.
+      await updateProfile(auth.currentUser, { displayName: body.name });
       return userCredential.user;
     } catch (error) {
       const errorMessage = error.message;
