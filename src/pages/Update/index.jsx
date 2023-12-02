@@ -52,7 +52,6 @@ const Update = () => {
     description: "",
     images: [],
   });
-  const [imgUrl, setImgUrl] = useState("");
 
   const userInfo = useSelector((state) => state.user?.userData);
 
@@ -123,11 +122,7 @@ const Update = () => {
             onChange={handleChange}
           ></TextArea>
         </div>
-        <ImageUpdate
-          images={post.images}
-          onImageChange={handleImages}
-          imageUrl={setImgUrl}
-        />
+        <ImageUpdate images={post.images} onImageChange={handleImages} />
       </form>
       <ButtonGroup>
         <FirstBtn>취소</FirstBtn>

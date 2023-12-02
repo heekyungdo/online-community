@@ -61,40 +61,24 @@ const UpdateBtn = styled.div`
 const ImageInput = styled.input`
   display: none;
 `;
-const ImageUpdate = ({ images, onImageChange, imageUrl }) => {
+const ImageUpdate = ({ images, onImageChange }) => {
   const storage = getStorage();
-  const id = Date.now();
 
   const handleUpdate = (e) => {
     console.log(e.target.files[0]);
-    // if (!file) return null;
-    // const storageRef = ref(storage, `images/${file[0].name}_${id}`);
-    // const uploadTask = uploadBytes(storageRef, file[0]);
+    const file = e.target.files[0];
+    if (!file) return null;
+    const id = Date.now();
+    const storageRef = ref(storage, `images/${file.name}_${id}`);
 
-    // uploadTask.then((snapshot) => {
-    //   getDownloadURL(snapshot.ref).then((downloadURL) => {
-    //     console.log(downloadURL);
-    //     onImageChange([...images, downloadURL]);
-    //     imageUrl((prev) => [
-    //       ...prev,
-    //       { url: downloadURL, id: `images/${downloadURL.name}_${id}` },
-    //     ]);
-    //   });
-    // });
+    uploadBytes(storageRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((imageUrl) => {
+        onImageChange([...images, imageUrl]);
+      });
+    });
   };
 
-  const handleDelete = (image) => {
-    console.log(image.target.parentNode.id);
-    const deleteRef = ref(storage, event.target.parentNode.id);
-    // deleteObject() 참조만 넣어주면 끝... 댕쉽
-    deleteObject(deleteRef);
-    // 하지만 스토리지에서 삭제한다고 imgUrl에도 바로 삭제되는 거 아니니까 id를 기준으로 필터 메소드를 통해 손쉽게 URL삭제!
-    imageUrl(imgUrl.filter((obj) => obj.id !== event.target.parentNode.id));
-    // const currentIndex = images.indexOf(image);
-    // let newImages = [...images];
-    // newImages.splice(currentIndex, 1);
-    // onImageChange(newImages);
-  };
+  const handleDelete = (image) => {};
 
   return (
     <Wrapper>
