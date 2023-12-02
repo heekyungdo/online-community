@@ -61,6 +61,7 @@ const UpdateBtn = styled.div`
 const ImageInput = styled.input`
   display: none;
 `;
+
 const ImageUpdate = ({ images, onImageChange }) => {
   const storage = getStorage();
 
@@ -78,7 +79,21 @@ const ImageUpdate = ({ images, onImageChange }) => {
     });
   };
 
-  const handleDelete = (image) => {};
+  const handleDelete = (image) => {
+    const desertRef = ref(storage, image);
+
+    // Delete the file
+    deleteObject(desertRef)
+      .then(() => {
+        const currentIndex = images.indexOf(image);
+        let newImages = [...images];
+        newImages.splice(currentIndex, 1);
+        onImageChange(newImages);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <Wrapper>
