@@ -3,6 +3,8 @@ import Notice from "../../components/Notice";
 import styled from "styled-components";
 import ImageUpdate from "../../components/ImageUpdate";
 import { useSelector } from "react-redux";
+import { getDatabase, ref, set } from "firebase/database";
+import app from "../../utils/firebase";
 
 const TitleWrapper = styled.div`
   margin: 30px 0 10px;
@@ -17,7 +19,9 @@ const TextArea = styled.textarea`
   width: 100%;
   resize: none;
   height: 50vh;
-  box-sizing: border-box;
+  // box-sizing: border-box;
+  // word-wrap: break-word;
+  // word-break: break-word;
 `;
 
 const ButtonGroup = styled.div`
@@ -40,7 +44,6 @@ const FirstBtn = styled.button`
 `;
 const SecondBtn = styled.button`
   background: #add8e6;
-  // color: white;
   border: 1px solid #add8e6;
   border-radius: 4px;
   cursor: pointer;
@@ -66,7 +69,7 @@ const Update = () => {
   let past = `${year}/${month < 10 ? "0" + month : month}/${
     date < 10 ? "0" + date : date
   }`;
-  let hour = today.getHours();
+  let hour = today.getHours() % 12 || 12;
   let min = today.getMinutes();
   let sec = today.getSeconds();
   let time = `${hour < 10 ? "0" + hour : hour}/${min < 10 ? "0" + min : min}/${
@@ -78,9 +81,20 @@ const Update = () => {
 
     const body = {
       writer: userInfo.name,
-      date: yesterday !== today ? past : time,
+      date: yesterday !== today ? time : past,
       ...post,
     };
+
+    const db = getDatabase(app);
+    set(ref(db, "post/" + userInfo.id), {
+      body,
+    });
+
+    setPost({
+      title: "",
+      description: "",
+      images: [],
+    });
   };
 
   const handleChange = (e) => {
@@ -114,20 +128,20 @@ const Update = () => {
           />
         </TitleWrapper>
         <div>
-          <label htmlFor="des"></label>
+          <label htmlFor="description"></label>
           <TextArea
-            id="des"
-            name="des"
+            id="description"
+            name="description"
             value={post.description}
             onChange={handleChange}
-          ></TextArea>
+          />
         </div>
         <ImageUpdate images={post.images} onImageChange={handleImages} />
+        <ButtonGroup>
+          <FirstBtn>취소</FirstBtn>
+          <SecondBtn type="submit">작성완료</SecondBtn>
+        </ButtonGroup>
       </form>
-      <ButtonGroup>
-        <FirstBtn>취소</FirstBtn>
-        <SecondBtn>작성완료</SecondBtn>
-      </ButtonGroup>
     </div>
   );
 };

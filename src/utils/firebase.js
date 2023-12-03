@@ -9,7 +9,8 @@ const {
   VITE_FIREBASE_PROJECT_ID,
   VITE_FIREBASE_STORAGE_BUCKET,
   VITE_FIREBASE_MESSAGING_SENDER_ID,
-  VITE_FIREBASEP_APP_ID,
+  VITE_FIREBASE_APP_ID,
+  VITE_FIREBASE_DATABASE_URL,
 } = import.meta.env;
 
 // Your web app's Firebase configuration
@@ -19,7 +20,8 @@ const firebaseConfig = {
   projectId: VITE_FIREBASE_PROJECT_ID,
   storageBucket: VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: VITE_FIREBASEP_APP_ID,
+  appId: VITE_FIREBASE_APP_ID,
+  databaseURL: VITE_FIREBASE_DATABASE_URL,
 };
 
 // Initialize Firebase

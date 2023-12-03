@@ -22,7 +22,7 @@ const auth = getAuth(app);
 const Contents = styled.main`
   max-width: 1420px;
   padding: 70px 50px;
-  margin: 0 auto;
+  margin: 0 auto auto;
 `;
 
 function Layout() {
