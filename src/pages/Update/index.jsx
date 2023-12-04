@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { getDatabase, ref, set, push } from "firebase/database";
 import app from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import { collection, addDoc, getFirestore } from "firebase/firestore";
 
 const TitleWrapper = styled.div`
   margin: 30px 0 10px;
@@ -51,6 +52,8 @@ const SecondBtn = styled.button`
 `;
 
 const Update = () => {
+  const db = getDatabase(app);
+  const databaseURL = getFirestore(app);
   const navigate = useNavigate();
 
   const [post, setPost] = useState({
@@ -61,44 +64,41 @@ const Update = () => {
 
   const userInfo = useSelector((state) => state.user?.userData);
 
-  let today = new Date();
-  let today_ts = Date.parse(today);
-  let yesterday_ts = today_ts - 60 * 60 * 24 * 1000;
-  let yesterday = new Date(yesterday_ts);
+  // let today = new Date();
+  // let today_ts = Date.parse(today);
+  // let yesterday_ts = today_ts - 60 * 60 * 24 * 1000;
+  // let yesterday = new Date(yesterday_ts);
 
-  let year = today.getFullYear();
-  let month = today.getMonth() + 1;
-  let date = today.getDate();
-  let past = `${year}/${month < 10 ? "0" + month : month}/${
-    date < 10 ? "0" + date : date
-  }`;
-  let hour = today.getHours() % 12 || 12;
-  let min = today.getMinutes();
-  let sec = today.getSeconds();
-  let time = `${hour < 10 ? "0" + hour : hour}/${min < 10 ? "0" + min : min}/${
-    sec < 10 ? "0" + sec : sec
-  }`;
+  // let year = today.getFullYear();
+  // let month = today.getMonth() + 1;
+  // let date = today.getDate();
+  // let past = `${year}/${month < 10 ? "0" + month : month}/${
+  //   date < 10 ? "0" + date : date
+  // }`;
+  // let hour = today.getHours() % 12 || 12;
+  // let min = today.getMinutes();
+  // let sec = today.getSeconds();
+  // let time = `${hour < 10 ? "0" + hour : hour}/${min < 10 ? "0" + min : min}/${
+  //   sec < 10 ? "0" + sec : sec
+  // }`;
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const body = {
+    const postInfo = {
       writer: userInfo.name,
-      date: yesterday !== today ? time : past,
+      date: Date.parse(new Date()),
       ...post,
     };
 
-    const db = getDatabase(app);
-    push(ref(db, "post/" + userInfo.id), {
-      body,
-    });
+    push(ref(db, "post/" + userInfo.id), postInfo);
 
     setPost({
       title: "",
       description: "",
       images: [],
     });
-    navigate("/community");
+    // navigate("/community");
   };
 
   const handleChange = (e) => {
@@ -109,11 +109,14 @@ const Update = () => {
     }));
   };
 
-  const handleImages = (newImages) => {
-    setPost((prevState) => ({
+  const handleImages = async (newImages) => {
+    await setPost((prevState) => ({
       ...prevState,
       images: newImages,
     }));
+    await addDoc(collection(databaseURL, "photo"), {
+      images: newImages,
+    });
   };
 
   return (

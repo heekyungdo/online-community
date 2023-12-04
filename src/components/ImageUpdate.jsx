@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import app from "../utils/firebase";
 import {
   getStorage,
   ref,
@@ -65,14 +66,13 @@ const ImageInput = styled.input`
 const ImageUpdate = ({ images, onImageChange }) => {
   const storage = getStorage();
 
-  const handleUpdate = (e) => {
-    console.log(e.target.files[0]);
+  const handleUpdate = async (e) => {
     const file = e.target.files[0];
     if (!file) return null;
     const id = Date.now();
     const storageRef = ref(storage, `images/${file.name}_${id}`);
 
-    uploadBytes(storageRef, file).then((snapshot) => {
+    await uploadBytes(storageRef, file).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((imageUrl) => {
         onImageChange([...images, imageUrl]);
       });
