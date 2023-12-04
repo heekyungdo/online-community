@@ -30,7 +30,7 @@ const userSlice = createSlice({
         // Add user to the state array
         state.isLoading = true;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.isLoading = false;
         toast.success("회원가입에 성공했습니다.");
       })

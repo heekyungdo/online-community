@@ -3,8 +3,9 @@ import Notice from "../../components/Notice";
 import styled from "styled-components";
 import ImageUpdate from "../../components/ImageUpdate";
 import { useSelector } from "react-redux";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, push } from "firebase/database";
 import app from "../../utils/firebase";
+import { useNavigate } from "react-router-dom";
 
 const TitleWrapper = styled.div`
   margin: 30px 0 10px;
@@ -50,6 +51,8 @@ const SecondBtn = styled.button`
 `;
 
 const Update = () => {
+  const navigate = useNavigate();
+
   const [post, setPost] = useState({
     title: "",
     description: "",
@@ -86,7 +89,7 @@ const Update = () => {
     };
 
     const db = getDatabase(app);
-    set(ref(db, "post/" + userInfo.id), {
+    push(ref(db, "post/" + userInfo.id), {
       body,
     });
 
@@ -95,6 +98,7 @@ const Update = () => {
       description: "",
       images: [],
     });
+    navigate("/community");
   };
 
   const handleChange = (e) => {
