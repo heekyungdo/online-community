@@ -21,9 +21,9 @@ const TextArea = styled.textarea`
   width: 100%;
   resize: none;
   height: 50vh;
-  // box-sizing: border-box;
-  // word-wrap: break-word;
-  // word-break: break-word;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  word-break: break-word;
 `;
 
 const ButtonGroup = styled.div`

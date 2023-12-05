@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Notice from "../../components/Notice";
+// import {
+//   getFirestore,
+//   collection,
+//   doc,
+//   getDoc,
+//   setDoc,
+//   query,
+//   orderBy,
+//   onSnapshot,
+//   getDocs,
+// } from "firebase/firestore";
+import {
+  getDatabase,
+  ref,
+  query,
+  limitToLast,
+  orderByChild,
+  onValue,
+} from "firebase/database";
+import { getAuth } from "firebase/auth";
+import app from "../../utils/firebase";
 
 const MainTable = styled.div`
   margin: 50px 0 0;
@@ -35,6 +56,43 @@ const Pagination = styled.div`
   text-align: right;
 `;
 const Community = ({ isAuth }) => {
+  const [test, setTest] = useState();
+
+  const db = getDatabase(app);
+  const auth = getAuth();
+
+  useEffect(() => {
+    getData();
+  });
+
+  const getData = async () => {
+    const db = getDatabase();
+
+    const dbRef = ref(db, "post");
+
+    onValue(
+      dbRef,
+      (snapshot) => {
+        // console.log(snapshot);
+        snapshot.forEach((childSnapshot) => {
+          const postId = childSnapshot.key;
+          const childData = childSnapshot.val();
+          console.log(childData);
+          // const starCountRef = ref(db, "posts/" + postId + "/starCount");
+          // console.log(starCountRef);
+          // onValue(starCountRef, (snapshot) => {
+          //   const data = snapshot.val();
+          //   console.log(data);
+
+          // });
+        });
+      },
+      {
+        onlyOnce: true,
+      }
+    );
+  };
+
   const list = [
     { key: 1, value: "5개" },
     { key: 2, value: "10개" },
