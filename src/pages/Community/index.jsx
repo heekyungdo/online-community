@@ -3,17 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Notice from "../../components/Notice";
-// import {
-//   getFirestore,
-//   collection,
-//   doc,
-//   getDoc,
-//   setDoc,
-//   query,
-//   orderBy,
-//   onSnapshot,
-//   getDocs,
-// } from "firebase/firestore";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 import {
   getDatabase,
   ref,
@@ -21,9 +11,12 @@ import {
   limitToLast,
   orderByChild,
   onValue,
+  child,
+  onChildChanged,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import app from "../../utils/firebase";
+import { get } from "react-hook-form";
 
 const MainTable = styled.div`
   margin: 50px 0 0;
@@ -56,35 +49,43 @@ const Pagination = styled.div`
   text-align: right;
 `;
 const Community = ({ isAuth }) => {
-  const [test, setTest] = useState();
+  // const [title, setTitle] = useState("");
 
   const db = getDatabase(app);
   const auth = getAuth();
 
   useEffect(() => {
     getData();
-  });
+  }, []);
 
   const getData = async () => {
-    const db = getDatabase();
+    // const querySnapshot = await getDocs(collection(db, "post"));
+    // querySnapshot.forEach((doc) => {
+    //   console.log(`${doc.id} => ${doc.data()}`);
+    // });
+
+    const postRef = ref(db, "post");
+    // onChildChanged(postRef, (data) => {
+    //   console.log(data.val());
+    // });
+
+    // onValue(postRef, (snapshot) => {
+    //   const data = snapshot.val();
+    //   console.log(data);
+    //   for (let i in data) {
+    //     console.log(data[i].writer);
+    //   }
+    // });
 
     const dbRef = ref(db, "post");
-
+    // const dbRef = query(ref(db, "post"));
     onValue(
       dbRef,
       (snapshot) => {
-        // console.log(snapshot);
         snapshot.forEach((childSnapshot) => {
-          const postId = childSnapshot.key;
+          const childKey = childSnapshot.key;
           const childData = childSnapshot.val();
           console.log(childData);
-          // const starCountRef = ref(db, "posts/" + postId + "/starCount");
-          // console.log(starCountRef);
-          // onValue(starCountRef, (snapshot) => {
-          //   const data = snapshot.val();
-          //   console.log(data);
-
-          // });
         });
       },
       {

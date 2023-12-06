@@ -6,7 +6,12 @@ import { useSelector } from "react-redux";
 import { getDatabase, ref, set, push } from "firebase/database";
 import app from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  serverTimestamp,
+} from "firebase/firestore";
 
 const TitleWrapper = styled.div`
   margin: 30px 0 10px;
@@ -87,7 +92,7 @@ const Update = () => {
 
     const postInfo = {
       writer: userInfo.name,
-      date: Date.parse(new Date()),
+      date: serverTimestamp(),
       ...post,
     };
 
