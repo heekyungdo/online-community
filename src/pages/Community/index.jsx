@@ -4,19 +4,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Notice from "../../components/Notice";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
-import {
-  getDatabase,
-  ref,
-  query,
-  limitToLast,
-  orderByChild,
-  onValue,
-  child,
-  onChildChanged,
-} from "firebase/database";
-import { getAuth } from "firebase/auth";
 import app from "../../utils/firebase";
-import { get } from "react-hook-form";
 
 const MainTable = styled.div`
   margin: 50px 0 0;
@@ -49,50 +37,20 @@ const Pagination = styled.div`
   text-align: right;
 `;
 const Community = ({ isAuth }) => {
-  // const [title, setTitle] = useState("");
+  const fireStore = getFirestore(app);
 
-  const db = getDatabase(app);
-  const auth = getAuth();
+  const [post, setPost] = useState([]);
+
+  const getData = async () => {
+    const valRef = collection(fireStore, "post");
+    const data = await getDocs(valRef);
+    const allData = data.docs.map((val) => ({ ...val.data(), id: val.id }));
+    setPost(allData);
+  };
 
   useEffect(() => {
     getData();
   }, []);
-
-  const getData = async () => {
-    // const querySnapshot = await getDocs(collection(db, "post"));
-    // querySnapshot.forEach((doc) => {
-    //   console.log(`${doc.id} => ${doc.data()}`);
-    // });
-
-    const postRef = ref(db, "post");
-    // onChildChanged(postRef, (data) => {
-    //   console.log(data.val());
-    // });
-
-    // onValue(postRef, (snapshot) => {
-    //   const data = snapshot.val();
-    //   console.log(data);
-    //   for (let i in data) {
-    //     console.log(data[i].writer);
-    //   }
-    // });
-
-    const dbRef = ref(db, "post");
-    // const dbRef = query(ref(db, "post"));
-    onValue(
-      dbRef,
-      (snapshot) => {
-        snapshot.forEach((childSnapshot) => {
-          const childKey = childSnapshot.key;
-          const childData = childSnapshot.val();
-          console.log(childData);
-        });
-      },
-      {
-        onlyOnce: true,
-      }
-    );
-  };
 
   const list = [
     { key: 1, value: "5개" },
@@ -115,11 +73,17 @@ const Community = ({ isAuth }) => {
               <th>조회</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>dfsd</td>
-            </tr>
-          </tbody>
+          {post.map((value, index) => (
+            <tbody key={value.id}>
+              <tr>
+                <td>{index}</td>
+                <td>{value.writer}</td>
+                <td>{value.title}</td>
+                <td>{value.date}</td>
+                <td>조회수</td>
+              </tr>
+            </tbody>
+          ))}
         </Table>
       </MainTable>
       <Bottom>

@@ -8,6 +8,7 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
+import app from "../utils/firebase";
 import closeBtn from "../assets/images/btn_close.gif";
 
 const Wrapper = styled.div`
@@ -63,7 +64,7 @@ const ImageInput = styled.input`
 `;
 
 const ImageUpdate = ({ images, onImageChange }) => {
-  const storage = getStorage();
+  const storage = getStorage(app);
 
   const handleUpdate = async (e) => {
     const file = e.target.files[0];
@@ -81,7 +82,6 @@ const ImageUpdate = ({ images, onImageChange }) => {
   const handleDelete = (image) => {
     const desertRef = ref(storage, image);
 
-    // Delete the file
     deleteObject(desertRef)
       .then(() => {
         const currentIndex = images.indexOf(image);

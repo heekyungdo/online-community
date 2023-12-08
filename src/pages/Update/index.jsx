@@ -3,15 +3,9 @@ import Notice from "../../components/Notice";
 import styled from "styled-components";
 import ImageUpdate from "../../components/ImageUpdate";
 import { useSelector } from "react-redux";
-import { getDatabase, ref, set, push } from "firebase/database";
 import app from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import {
-  collection,
-  addDoc,
-  getFirestore,
-  serverTimestamp,
-} from "firebase/firestore";
+import { collection, addDoc, getFirestore } from "firebase/firestore";
 
 const TitleWrapper = styled.div`
   margin: 30px 0 10px;
@@ -57,8 +51,7 @@ const SecondBtn = styled.button`
 `;
 
 const Update = () => {
-  const db = getDatabase(app);
-  const databaseURL = getFirestore(app);
+  const fireStore = getFirestore(app);
   const navigate = useNavigate();
 
   const [post, setPost] = useState({
@@ -87,16 +80,18 @@ const Update = () => {
   //   sec < 10 ? "0" + sec : sec
   // }`;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const postInfo = {
       writer: userInfo.name,
-      date: serverTimestamp(),
+      date: Date.parse(new Date()),
       ...post,
     };
 
-    push(ref(db, "post/" + userInfo.id), postInfo);
+    // fireStore에 db 저장
+    const valRef = collection(fireStore, "post");
+    await addDoc(valRef, postInfo);
 
     setPost({
       title: "",
@@ -119,9 +114,6 @@ const Update = () => {
       ...prevState,
       images: newImages,
     }));
-    await addDoc(collection(databaseURL, "photo"), {
-      images: newImages,
-    });
   };
 
   return (
