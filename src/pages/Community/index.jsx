@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import Notice from "../../components/Notice";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import app from "../../utils/firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { postData } from "../../store/postSlice";
+// import { postData } from "../../store/thunkFunctions";
 
 const MainTable = styled.div`
   margin: 50px 0 0;
@@ -37,15 +40,18 @@ const Pagination = styled.div`
   text-align: right;
 `;
 const Community = ({ isAuth }) => {
+  const dispatch = useDispatch();
+
   const fireStore = getFirestore(app);
 
   const [post, setPost] = useState([]);
 
   const getData = async () => {
-    const valRef = collection(fireStore, "post");
+    const valRef = await collection(fireStore, "post");
     const data = await getDocs(valRef);
     const allData = data.docs.map((val) => ({ ...val.data(), id: val.id }));
-    setPost(allData);
+    setPost(allData.sort((a, b) => a - b));
+    dispatch(postData(allData));
   };
 
   useEffect(() => {
@@ -76,7 +82,7 @@ const Community = ({ isAuth }) => {
           {post.map((value, index) => (
             <tbody key={value.id}>
               <tr>
-                <td>{index}</td>
+                <td>{value.number}</td>
                 <td>{value.writer}</td>
                 <td>{value.title}</td>
                 <td>{value.date}</td>

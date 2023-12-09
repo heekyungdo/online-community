@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import app from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc, getFirestore } from "firebase/firestore";
+import { useDispatch } from "react-redux";
 
 const TitleWrapper = styled.div`
   margin: 30px 0 10px;
@@ -51,6 +52,8 @@ const SecondBtn = styled.button`
 `;
 
 const Update = () => {
+  const dispatch = useDispatch();
+
   const fireStore = getFirestore(app);
   const navigate = useNavigate();
 
@@ -61,6 +64,7 @@ const Update = () => {
   });
 
   const userInfo = useSelector((state) => state.user?.userData);
+  const valRef = collection(fireStore, "post");
 
   // let today = new Date();
   // let today_ts = Date.parse(today);
@@ -90,14 +94,14 @@ const Update = () => {
     };
 
     // fireStore에 db 저장
-    const valRef = collection(fireStore, "post");
     await addDoc(valRef, postInfo);
 
-    setPost({
+    await setPost({
       title: "",
       description: "",
       images: [],
     });
+
     // navigate("/community");
   };
 

@@ -11,9 +11,11 @@ import {
   persistReducer,
   persistStore,
 } from "redux-persist";
+import { postData } from "./postSlice";
 
 export const rootReducer = combineReducers({
   user: userReducer,
+  post: postData,
 });
 
 const persistConfig = {
