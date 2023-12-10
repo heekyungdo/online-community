@@ -43,13 +43,13 @@ const Community = ({ isAuth }) => {
   const navigate = useNavigate();
   const fireStore = getFirestore(app);
 
-  const [post, setPost] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   const getData = async () => {
     const valRef = await collection(fireStore, "post");
     const data = await getDocs(valRef);
     const allData = data.docs.map((val) => ({ ...val.data(), id: val.id }));
-    setPost(allData.sort((a, b) => a - b));
+    setPosts(allData.sort((a, b) => a - b));
     // console.log("all", allData);
     dispatch(postData(allData));
   };
@@ -65,8 +65,8 @@ const Community = ({ isAuth }) => {
     { key: 4, value: "20개" },
   ];
 
-  const handleDetail = (datailId) => {
-    navigate(`/board/${datailId}`);
+  const handleDetail = (index) => {
+    navigate(`/board/${index}`);
   };
   return (
     <div>
@@ -82,13 +82,13 @@ const Community = ({ isAuth }) => {
               <th>조회</th>
             </tr>
           </thead>
-          {post.map((value) => (
-            <tbody key={value.id}>
-              <tr onClick={() => handleDetail(value.id)}>
-                <td>{value.number}</td>
-                <td>{value.writer}</td>
-                <td>{value.title}</td>
-                <td>{value.date}</td>
+          {posts.map((post, index) => (
+            <tbody key={post.id}>
+              <tr onClick={() => handleDetail(index)}>
+                <td>{post.number}</td>
+                <td>{post.writer}</td>
+                <td>{post.title}</td>
+                <td>{post.date}</td>
                 <td>조회수</td>
               </tr>
             </tbody>
