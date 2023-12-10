@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Notice from "../../components/Notice";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import app from "../../utils/firebase";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { postData } from "../../store/postSlice";
-// import { postData } from "../../store/thunkFunctions";
 
 const MainTable = styled.div`
   margin: 50px 0 0;
@@ -41,7 +40,7 @@ const Pagination = styled.div`
 `;
 const Community = ({ isAuth }) => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const fireStore = getFirestore(app);
 
   const [post, setPost] = useState([]);
@@ -51,6 +50,7 @@ const Community = ({ isAuth }) => {
     const data = await getDocs(valRef);
     const allData = data.docs.map((val) => ({ ...val.data(), id: val.id }));
     setPost(allData.sort((a, b) => a - b));
+    // console.log("all", allData);
     dispatch(postData(allData));
   };
 
@@ -65,6 +65,9 @@ const Community = ({ isAuth }) => {
     { key: 4, value: "20개" },
   ];
 
+  const handleDetail = (datailId) => {
+    navigate(`/board/${datailId}`);
+  };
   return (
     <div>
       <Notice />
@@ -79,9 +82,9 @@ const Community = ({ isAuth }) => {
               <th>조회</th>
             </tr>
           </thead>
-          {post.map((value, index) => (
+          {post.map((value) => (
             <tbody key={value.id}>
-              <tr>
+              <tr onClick={() => handleDetail(value.id)}>
                 <td>{value.number}</td>
                 <td>{value.writer}</td>
                 <td>{value.title}</td>

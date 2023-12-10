@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   const reduxData = useSelector((state) => state.post);
-  console.log("dfdf", reduxData);
+  console.log("home", reduxData);
   return <div>Home</div>;
 };
 
