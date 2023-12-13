@@ -28,7 +28,7 @@ const Detail = () => {
           <div>
             <h2>{post.title}</h2>
             <p>이름: {post.writer}</p>
-            <p>등록일: {post.date}</p>
+            <p>등록일: {Date.parse(post.date)}</p>
             <p>조회수: </p>
           </div>
 

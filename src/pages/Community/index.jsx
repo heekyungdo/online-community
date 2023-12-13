@@ -3,7 +3,14 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import Notice from "../../components/Notice";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  limit,
+} from "firebase/firestore";
 import app from "../../utils/firebase";
 import { useDispatch } from "react-redux";
 import { postData } from "../../store/postSlice";
@@ -38,6 +45,7 @@ const BtnWrapper = styled.div`
 const Pagination = styled.div`
   text-align: right;
 `;
+
 const Community = ({ isAuth }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,10 +55,9 @@ const Community = ({ isAuth }) => {
 
   const getData = async () => {
     const valRef = await collection(fireStore, "post");
-    const data = await getDocs(valRef);
+    const data = await getDocs(query(valRef, orderBy("date", "desc")));
     const allData = data.docs.map((val) => ({ ...val.data(), id: val.id }));
-    setPosts(allData.sort((a, b) => a - b));
-    // console.log("all", allData);
+    setPosts(allData);
     dispatch(postData(allData));
   };
 
@@ -65,7 +72,26 @@ const Community = ({ isAuth }) => {
     { key: 4, value: "20개" },
   ];
 
-  const handleDetail = (index) => {
+  const [selected, setSelected] = useState(2);
+
+  const handleSelect = (e) => {
+    setSelected(e.target.value);
+    const newData = [...posts];
+    switch (selected) {
+      case 1:
+        return posts.splice(5);
+      case 2:
+        return posts.splice(10);
+      case 3:
+        return posts.splice(15);
+      case 4:
+        return posts.splice(20);
+      default:
+        return posts;
+    }
+  };
+
+  const goToDetail = (index) => {
     navigate(`/board/${index}`);
   };
   return (
@@ -82,13 +108,13 @@ const Community = ({ isAuth }) => {
               <th>조회</th>
             </tr>
           </thead>
-          {posts.map((post, index) => (
+          {posts?.map((post, index) => (
             <tbody key={post.id}>
-              <tr onClick={() => handleDetail(index)}>
-                <td>{post.number}</td>
+              <tr onClick={() => goToDetail(index)}>
+                <td>{index + 1}</td>
                 <td>{post.writer}</td>
                 <td>{post.title}</td>
-                <td>{post.date}</td>
+                {/* <td>{post.date}</td> */}
                 <td>조회수</td>
               </tr>
             </tbody>
@@ -98,7 +124,7 @@ const Community = ({ isAuth }) => {
       <Bottom>
         <div>
           <label htmlFor="">목록수</label>
-          <select>
+          <select onChange={handleSelect}>
             {list.map((item) => {
               return (
                 <option key={item.key} value={item.key}>

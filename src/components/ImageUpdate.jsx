@@ -69,7 +69,7 @@ const ImageUpdate = ({ images, onImageChange }) => {
   const handleUpdate = async (e) => {
     const file = e.target.files[0];
     if (!file) return null;
-    const id = Date.now();
+    const id = new Date();
     const storageRef = ref(storage, `images/${file.name}_${id}`);
 
     await uploadBytes(storageRef, file).then((snapshot) => {

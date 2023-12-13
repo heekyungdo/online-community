@@ -89,7 +89,7 @@ const Update = () => {
 
     const postInfo = {
       writer: userInfo.name,
-      date: Date.parse(new Date()),
+      date: new Date(),
       ...post,
     };
 
