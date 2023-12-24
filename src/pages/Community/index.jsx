@@ -17,6 +17,8 @@ import {
 import app from "../../utils/firebase";
 import { useDispatch } from "react-redux";
 import { postData } from "../../store/postSlice";
+import iconImage from '../../assets/images/icon_image.png'
+import iconText from '../../assets/images/icon_text.png'
 
 const MainTable = styled.div`
   margin: 50px 0 0;
@@ -24,7 +26,28 @@ const MainTable = styled.div`
 
 const Table = styled.table`
   width: 100%;
-`;
+  border-collapse: collapse;
+
+thead {
+  th{
+    padding:10px 0;
+  border-bottom: 1px solid #404040;
+}
+}
+  tbody{
+    text-align:center;
+    tr{
+      &:hover {
+        background:#f5f5f5;
+          }
+
+    td{
+      padding:7px 0;
+      border-bottom:1px solid #c1c1c1;
+   
+   
+  }
+`
 
 const Bottom = styled.div`
   display: flex;
@@ -110,6 +133,27 @@ if(hourDiff>24){
 }
   }
 
+  console.log(posts)
+  const setImageType = (images)=>{
+if(images.length===0){
+  return iconText
+} else {
+  return iconImage
+}
+  }
+
+  const renderData = (
+    posts?.length>0 && posts?.map((post,index)=>(
+      <tr key={post.id} onClick={()=>goToDetail(index)}>
+        <td>{index+1}</td>
+        <td>{post.writer}</td>
+        <td><img src={setImageType(post.images)} alt='image'/>{post.title}</td>
+        <td>{updatedDate(post.date)}</td>
+        <td>조회수</td>
+      </tr>
+    ))
+  )
+
   return (
     <div>
       <Notice />
@@ -124,17 +168,9 @@ if(hourDiff>24){
               <th>조회</th>
             </tr>
           </thead>
-          {posts?.map((post, index) => (
-            <tbody key={post.id}>
-              <tr onClick={() => goToDetail(index)}>
-                <td>{index + 1}</td>
-                <td>{post.writer}</td>
-                <td>{post.title}</td>
-                <td>{updatedDate(post.date)}</td>
-                <td>조회수</td>
-              </tr>
-            </tbody>
-          ))}
+          <tbody>
+            {renderData}
+          </tbody>
         </Table>
       </MainTable>
       <Bottom>
