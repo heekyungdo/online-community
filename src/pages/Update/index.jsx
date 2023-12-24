@@ -66,30 +66,12 @@ const Update = () => {
   const userInfo = useSelector((state) => state.user?.userData);
   const valRef = collection(fireStore, "post");
 
-  // let today = new Date();
-  // let today_ts = Date.parse(today);
-  // let yesterday_ts = today_ts - 60 * 60 * 24 * 1000;
-  // let yesterday = new Date(yesterday_ts);
-
-  // let year = today.getFullYear();
-  // let month = today.getMonth() + 1;
-  // let date = today.getDate();
-  // let past = `${year}/${month < 10 ? "0" + month : month}/${
-  //   date < 10 ? "0" + date : date
-  // }`;
-  // let hour = today.getHours() % 12 || 12;
-  // let min = today.getMinutes();
-  // let sec = today.getSeconds();
-  // let time = `${hour < 10 ? "0" + hour : hour}/${min < 10 ? "0" + min : min}/${
-  //   sec < 10 ? "0" + sec : sec
-  // }`;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const postInfo = {
       writer: userInfo.name,
-      date: new Date(),
+      date: new Date().toISOString(),
       ...post,
     };
 

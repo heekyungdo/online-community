@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime);
 import Notice from "../../components/Notice";
 import {
   getFirestore,
@@ -94,6 +97,19 @@ const Community = ({ isAuth }) => {
   const goToDetail = (index) => {
     navigate(`/board/${index}`);
   };
+
+  const updatedDate = (date)=>{
+const now = dayjs()
+const updatedDate = dayjs(date)
+const hourDiff = now.diff(updatedDate, 'hour') 
+
+if(hourDiff>24){
+  return updatedDate.format('YY-MM-DD')
+} else {
+  return updatedDate.format('HH:mm:ss')
+}
+  }
+
   return (
     <div>
       <Notice />
@@ -114,7 +130,7 @@ const Community = ({ isAuth }) => {
                 <td>{index + 1}</td>
                 <td>{post.writer}</td>
                 <td>{post.title}</td>
-                {/* <td>{post.date}</td> */}
+                <td>{updatedDate(post.date)}</td>
                 <td>조회수</td>
               </tr>
             </tbody>
