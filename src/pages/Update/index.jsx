@@ -102,6 +102,13 @@ const Update = () => {
     }));
   };
 
+  const handleCancle = ()=>{
+    if(window.confirm('정말 취소 하시겠습니까?')){
+      navigate('/')
+    } else {
+      alert('')
+    }
+  }
   return (
     <div>
       <Notice />
@@ -128,7 +135,7 @@ const Update = () => {
         </div>
         <ImageUpdate images={post.images} onImageChange={handleImages} />
         <ButtonGroup>
-          <FirstBtn>취소</FirstBtn>
+          <FirstBtn onClick={handleCancle}>취소</FirstBtn>
           <SecondBtn type="submit">작성완료</SecondBtn>
         </ButtonGroup>
       </form>

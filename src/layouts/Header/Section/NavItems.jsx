@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../../store/thunkFunctions";
 import styled from "styled-components";
@@ -17,6 +17,7 @@ const Menu = styled.p`
 
 const NavItems = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isAuth = useSelector((state) => state.user?.isAuth);
 
   const routes = [
@@ -26,8 +27,9 @@ const NavItems = () => {
     { to: "", name: "로그아웃", auth: true },
   ];
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
+  const handleLogout = async () => {
+   await dispatch(logoutUser());
+   navigate('/')
   };
 
   return (

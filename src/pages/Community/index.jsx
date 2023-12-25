@@ -3,8 +3,6 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-dayjs.extend(relativeTime);
 import Notice from "../../components/Notice";
 import {
   getFirestore,
@@ -19,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { postData } from "../../store/postSlice";
 import iconImage from '../../assets/images/icon_image.png'
 import iconText from '../../assets/images/icon_text.png'
+import Pagination from "./Section/Pagination";
 
 const MainTable = styled.div`
   margin: 50px 0 0;
@@ -39,13 +38,12 @@ thead {
     tr{
       &:hover {
         background:#f5f5f5;
+        cursor:pointer;
           }
 
     td{
       padding:7px 0;
       border-bottom:1px solid #c1c1c1;
-   
-   
   }
 `
 
@@ -68,22 +66,20 @@ const BtnWrapper = styled.div`
     font-weight: bold;
   }
 `;
-const Pagination = styled.div`
-  text-align: right;
-`;
 
 const Community = ({ isAuth }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const fireStore = getFirestore(app);
-
+const perPage= 4;
+const [currentPage, setCurrentPage]=useState(1)
   const [posts, setPosts] = useState([]);
 
   const getData = async () => {
     const valRef = await collection(fireStore, "post");
     const data = await getDocs(query(valRef, orderBy("date", "desc")));
     const allData = data.docs.map((val) => ({ ...val.data(), id: val.id }));
-    setPosts(allData);
+    setPosts(allData)
     dispatch(postData(allData));
   };
 
@@ -105,13 +101,13 @@ const Community = ({ isAuth }) => {
     const newData = [...posts];
     switch (selected) {
       case 1:
-        return posts.splice(5);
+        return posts.slice(5);
       case 2:
-        return posts.splice(10);
+        return posts.slice(10);
       case 3:
-        return posts.splice(15);
+        return posts.slice(15);
       case 4:
-        return posts.splice(20);
+        return posts.slice(20);
       default:
         return posts;
     }
@@ -127,13 +123,12 @@ const updatedDate = dayjs(date)
 const hourDiff = now.diff(updatedDate, 'hour') 
 
 if(hourDiff>24){
-  return updatedDate.format('YY-MM-DD')
+  return updatedDate.format('YY/MM/DD')
 } else {
   return updatedDate.format('HH:mm:ss')
 }
   }
 
-  console.log(posts)
   const setImageType = (images)=>{
 if(images.length===0){
   return iconText
@@ -142,20 +137,31 @@ if(images.length===0){
 }
   }
 
+const indexOfLast = currentPage*perPage
+const indexOfFirst = indexOfLast-perPage
+
+const handlePage =  (postData)=>{
+  let currentPosts = []
+  currentPosts=  postData.slice(indexOfFirst,indexOfLast)
+return currentPosts
+}
+
+
   const renderData = (
-    posts?.length>0 && posts?.map((post,index)=>(
+   posts?.length>0 && posts?.map((post,index)=>(
       <tr key={post.id} onClick={()=>goToDetail(index)}>
         <td>{index+1}</td>
         <td>{post.writer}</td>
-        <td><img src={setImageType(post.images)} alt='image'/>{post.title}</td>
+        <td><img src={setImageType(post.images)} alt='image'/>{" "}{post.title}</td>
         <td>{updatedDate(post.date)}</td>
         <td>조회수</td>
       </tr>
     ))
   )
 
+
   return (
-    <div>
+    <section>
       <Notice />
       <MainTable>
         <Table>
@@ -175,8 +181,8 @@ if(images.length===0){
       </MainTable>
       <Bottom>
         <div>
-          <label htmlFor="">목록수</label>
-          <select onChange={handleSelect}>
+          <label htmlFor="listCount">목록수</label>
+          <select id="listCount" onChange={handleSelect}>
             {list.map((item) => {
               return (
                 <option key={item.key} value={item.key}>
@@ -194,8 +200,8 @@ if(images.length===0){
           ) : null}
         </BtnWrapper>
       </Bottom>
-      <Pagination></Pagination>
-    </div>
+    <Pagination postsPerPage={perPage} postsCurrentPage={setCurrentPage} totalPosts={posts.length}/>
+    </section>
   );
 };
 
