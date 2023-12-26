@@ -76,7 +76,7 @@ const [currentPage, setCurrentPage]=useState(1)
   const [posts, setPosts] = useState([]);
   const indexOfFirst = (currentPage-1)*perPage
   const indexOfLast = indexOfFirst+perPage
-  
+
   const getData = async () => {
     const valRef = await collection(fireStore, "post");
     const data = await getDocs(query(valRef, orderBy("date", "desc")));
@@ -152,7 +152,6 @@ if(images.length===0){
     ))
   )
 
-
   return (
     <section>
       <Notice />
@@ -193,7 +192,7 @@ if(images.length===0){
           ) : null}
         </BtnWrapper>
       </Bottom>
-    <Pagination postsPerPage={perPage} postsCurrentPage={setCurrentPage} totalPosts={posts.length}/>
+    <Pagination postsPerPage={perPage} handleCurrentPage={setCurrentPage} currentPage={currentPage} totalPosts={posts.length}/>
     </section>
   );
 };
