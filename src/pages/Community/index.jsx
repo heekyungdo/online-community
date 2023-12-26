@@ -71,10 +71,12 @@ const Community = ({ isAuth }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const fireStore = getFirestore(app);
-const perPage= 4;
+const perPage= 5;
 const [currentPage, setCurrentPage]=useState(1)
   const [posts, setPosts] = useState([]);
-
+  const indexOfFirst = (currentPage-1)*perPage
+  const indexOfLast = indexOfFirst+perPage
+  
   const getData = async () => {
     const valRef = await collection(fireStore, "post");
     const data = await getDocs(query(valRef, orderBy("date", "desc")));
@@ -83,9 +85,9 @@ const [currentPage, setCurrentPage]=useState(1)
     dispatch(postData(allData));
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  useEffect(()=>{
+getData()
+  },[])
 
   const list = [
     { key: 1, value: "5개" },
@@ -119,6 +121,7 @@ const [currentPage, setCurrentPage]=useState(1)
 
   const updatedDate = (date)=>{
 const now = dayjs()
+const yesterday = now.add(1,'day')
 const updatedDate = dayjs(date)
 const hourDiff = now.diff(updatedDate, 'hour') 
 
@@ -137,18 +140,8 @@ if(images.length===0){
 }
   }
 
-const indexOfLast = currentPage*perPage
-const indexOfFirst = indexOfLast-perPage
-
-const handlePage =  (postData)=>{
-  let currentPosts = []
-  currentPosts=  postData.slice(indexOfFirst,indexOfLast)
-return currentPosts
-}
-
-
   const renderData = (
-   posts?.length>0 && posts?.map((post,index)=>(
+   posts?.length>0 && posts?.slice(indexOfFirst,indexOfLast).map((post,index)=>(
       <tr key={post.id} onClick={()=>goToDetail(index)}>
         <td>{index+1}</td>
         <td>{post.writer}</td>
