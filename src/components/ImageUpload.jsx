@@ -36,7 +36,7 @@ const ImageWrapper = styled.div`
   }
 `;
 
-const UpdatedImage = styled.img`
+const UploadedImage = styled.img`
   width: 120px;
   height: 80px;
   margin-bottom: 10px;
@@ -47,7 +47,7 @@ const CloseImage = styled.img`
   cursor: pointer;
 `;
 
-const UpdateBtn = styled.div`
+const UploadBtn = styled.div`
   span {
     border: 1px solid #ccc;
     text-align: center;
@@ -63,10 +63,10 @@ const ImageInput = styled.input`
   display: none;
 `;
 
-const ImageUpdate = ({ images, onImageChange }) => {
+const ImageUpload = ({ images, onImageChange }) => {
   const storage = getStorage(app);
 
-  const handleUpdate = async (e) => {
+  const handleUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return null;
     const id = new Date();
@@ -99,7 +99,7 @@ const ImageUpdate = ({ images, onImageChange }) => {
       <ImageList>
         {images.map((image, index) => (
           <ImageWrapper key={index}>
-            <UpdatedImage src={image} alt={image} />
+            <UploadedImage src={image} alt={image} />
             <CloseImage
               src={closeBtn}
               alt="close"
@@ -111,15 +111,15 @@ const ImageUpdate = ({ images, onImageChange }) => {
 
       <div>
         <label htmlFor="image">
-          <UpdateBtn>
+          <UploadBtn>
             <span>사진 업로드</span>
-          </UpdateBtn>
+          </UploadBtn>
           <ImageInput
             type="file"
             id="image"
             accept="image/*"
             multiple={true}
-            onChange={handleUpdate}
+            onChange={handleUpload}
           />
         </label>
       </div>
@@ -127,10 +127,10 @@ const ImageUpdate = ({ images, onImageChange }) => {
   );
 };
 
-ImageUpdate.propTypes = {
+ImageUpload.propTypes = {
   images: PropTypes.array,
   onImageChange: PropTypes.func,
   imageUrl: PropTypes.func,
 };
 
-export default ImageUpdate;
+export default ImageUpload;

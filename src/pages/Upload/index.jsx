@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Notice from "../../components/Notice";
 import styled from "styled-components";
-import ImageUpdate from "../../components/ImageUpdate";
+import ImageUpload from "../../components/ImageUpload";
 import { useSelector } from "react-redux";
 import app from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
@@ -51,7 +51,7 @@ const SecondBtn = styled.button`
   cursor: pointer;
 `;
 
-const Update = () => {
+const Upload = () => {
   const dispatch = useDispatch();
 
   const fireStore = getFirestore(app);
@@ -133,7 +133,7 @@ const Update = () => {
             onChange={handleChange}
           />
         </div>
-        <ImageUpdate images={post.images} onImageChange={handleImages} />
+        <ImageUpload images={post.images} onImageChange={handleImages} />
         <ButtonGroup>
           <FirstBtn onClick={handleCancle}>취소</FirstBtn>
           <SecondBtn type="submit">작성완료</SecondBtn>
@@ -143,4 +143,4 @@ const Update = () => {
   );
 };
 
-export default Update;
+export default Upload;

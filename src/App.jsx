@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Community from "./pages/Community";
 import Detail from "./pages/Detail";
-import Update from "./pages/Update";
+import Upload from "./pages/Upload";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -78,7 +78,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="/board/update" element={<Update />} />
+          <Route path="/board/upload" element={<Upload />} />
           <Route element={<NotAuthRoutes isAuth={isAuth} />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

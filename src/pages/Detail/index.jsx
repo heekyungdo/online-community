@@ -3,6 +3,13 @@ import Notice from "../../components/Notice";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import app from "../../utils/firebase";
 import { useParams } from "react-router-dom";
+import styled from 'styled-components'
+
+const Image = styled.img`
+max-width:500px;
+width:100%;
+height:300px;
+`
 
 const Detail = () => {
   const fireStore = getFirestore(app);
@@ -33,6 +40,12 @@ const Detail = () => {
           </div>
 
           <div>
+              {post?.images?.length>0 && post.images.map(image=>(
+                <p key={image}>
+                <Image src={image} alt={image}/>
+                </p>
+              ))}
+          
             <p>{post.description}</p>
           </div>
         </div>

@@ -194,7 +194,7 @@ if(images.length===0){
           ) : null}
         </BtnWrapper>
       </Bottom>
-    <Pagination handleCurrentPage={setCurrentPage} currentPage={currentPage} lastPage={lastPage}/>
+    <Pagination postsPerPage={perPage} handleCurrentPage={setCurrentPage} currentPage={currentPage} lastPage={lastPage}/>
     </section>
   );
 };
