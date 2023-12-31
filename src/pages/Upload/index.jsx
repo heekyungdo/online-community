@@ -53,7 +53,7 @@ const SecondBtn = styled.button`
 
 const Upload = () => {
   const dispatch = useDispatch();
-
+const [id, setId]=useState(0)
   const fireStore = getFirestore(app);
   const navigate = useNavigate();
 
@@ -70,6 +70,7 @@ const Upload = () => {
     e.preventDefault();
 
     const postInfo = {
+      // id:setId(prev=>prev+1),
       writer: userInfo.name,
       date: new Date().toISOString(),
       ...post,

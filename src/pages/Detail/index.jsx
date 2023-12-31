@@ -4,6 +4,26 @@ import { collection, getDocs, getFirestore } from "firebase/firestore";
 import app from "../../utils/firebase";
 import { useParams } from "react-router-dom";
 import styled from 'styled-components'
+import dayjs from 'dayjs'
+
+const ContentsWrapper = styled.div`
+margin-top:50px;
+border:1px solid #dbdada;
+padding:15px 20px;
+`
+const PostInfo = styled.p`
+margin:7px 0;
+font-size:15px;
+`
+
+const ContentsTitle = styled.div`
+
+`
+const Contents = styled.div`
+margin-top:20px;
+border-top:1px solid #dbdada;
+padding:15px 20px 0 0;
+`
 
 const Image = styled.img`
 max-width:500px;
@@ -31,15 +51,15 @@ const Detail = () => {
     <div>
       <Notice />
       {post && (
-        <div>
+        <ContentsWrapper>
           <div>
             <h2>{post.title}</h2>
-            <p>이름: {post.writer}</p>
-            <p>등록일: {Date.parse(post.date)}</p>
-            <p>조회수: </p>
+            <PostInfo>이름: {post.writer}</PostInfo>
+            <PostInfo>등록일: {dayjs(post.date).format('YYYY-MM-DD')}</PostInfo>
+            <PostInfo>조회수: </PostInfo>
           </div>
 
-          <div>
+          <Contents>
               {post?.images?.length>0 && post.images.map(image=>(
                 <p key={image}>
                 <Image src={image} alt={image}/>
@@ -47,8 +67,8 @@ const Detail = () => {
               ))}
           
             <p>{post.description}</p>
-          </div>
-        </div>
+          </Contents>
+        </ContentsWrapper>
       )}
     </div>
   );

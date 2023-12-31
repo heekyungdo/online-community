@@ -82,6 +82,7 @@ const [currentPage, setCurrentPage]=useState(1)
     const valRef = await collection(fireStore, "post");
     const data = await getDocs(query(valRef, orderBy("date", "desc")));
     const allData = data.docs.map((val) => ({ ...val.data(), id: val.id }));
+    console.log(allData)
     setPosts(allData)
     dispatch(postData(allData));
   };
@@ -189,12 +190,14 @@ if(images.length===0){
         <BtnWrapper>
           {isAuth ? (
             <button>
-              <Link to={"/board/update"}>글쓰기</Link>
+              <Link to={"/board/upload"}>글쓰기</Link>
             </button>
           ) : null}
         </BtnWrapper>
       </Bottom>
+      {posts?.length>0? 
     <Pagination postsPerPage={perPage} handleCurrentPage={setCurrentPage} currentPage={currentPage} lastPage={lastPage}/>
+    :null}
     </section>
   );
 };
