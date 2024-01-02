@@ -5,6 +5,7 @@ import app from "../../utils/firebase";
 import { useParams } from "react-router-dom";
 import styled from 'styled-components'
 import dayjs from 'dayjs'
+import CommentInput from "../../components/CommentInput";
 
 const ContentsWrapper = styled.div`
 margin-top:50px;
@@ -70,6 +71,7 @@ const Detail = () => {
           </Contents>
         </ContentsWrapper>
       )}
+      <CommentInput/>
     </div>
   );
 };
