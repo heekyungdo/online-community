@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import app from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc, getFirestore } from "firebase/firestore";
-import { useDispatch } from "react-redux";
 
 const TitleWrapper = styled.div`
   margin: 30px 0 10px;
@@ -52,8 +51,6 @@ const SecondBtn = styled.button`
 `;
 
 const Upload = () => {
-  const dispatch = useDispatch();
-const [id, setId]=useState(0)
   const fireStore = getFirestore(app);
   const navigate = useNavigate();
 

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Notice from "../../components/Notice";
-import { collection, getDocs, getFirestore, orderBy, query } from "firebase/firestore";
-import app from "../../utils/firebase";
 import { useParams } from "react-router-dom";
 import styled from 'styled-components'
 import dayjs from 'dayjs'
 import CommentInput from "../../components/CommentInput";
 import CommentList from "../../components/CommentList";
+import { useSelector } from "react-redux";
 
 const ContentsWrapper = styled.div`
 margin-top:50px;
@@ -43,20 +42,14 @@ height:300px;
 `
 
 const Detail = () => {
-  const fireStore = getFirestore(app);
   const params = useParams();
-  const [post, setPost] = useState("");
-
-  const getData = async () => {
-    const valRef = await collection(fireStore, "post");
-    const data = await getDocs(query(valRef, orderBy("date")));
-    const allData = data.docs.map((val) => ({ ...val.data(), id: val.id }));
-    setPost(allData[params.id]);
-  };
+  const [post, setPost] = useState({});
+const postInfo = useSelector((state)=>state.post?.postInfo)
 
   useEffect(() => {
-    getData();
-  }, []);
+    const data = postInfo[params.id]
+    setPost(data)
+  }, [postInfo]);
 
   return (
     <div>

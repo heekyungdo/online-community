@@ -82,7 +82,7 @@ const [currentPage, setCurrentPage]=useState(1)
     const valRef = await collection(fireStore, "post");
     const data = await getDocs(query(valRef, orderBy("date")));
     const allData = data.docs.map((val,index) => ({ ...val.data(), id: val.id ,index:index}));
-    console.log(allData)
+    console.log(typeof allData)
     setPosts(allData)
     dispatch(postData(allData));
   };
@@ -118,9 +118,6 @@ getData()
   };
 
   const goToDetail = (index) => {
-    console.log(index)
-    const postDetail = posts[index]
-    console.log('ff',postDetail)
     navigate(`/board/${index}`);
   };
 

@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
+import postReducer from "./postSlice";
 import storage from "redux-persist/lib/storage";
 import {
   FLUSH,
@@ -11,11 +12,11 @@ import {
   persistReducer,
   persistStore,
 } from "redux-persist";
-import { postData } from "./postSlice";
+// import { postData } from "./postSlice";
 
 export const rootReducer = combineReducers({
   user: userReducer,
-  post: postData,
+  post: postReducer,
 });
 
 const persistConfig = {
