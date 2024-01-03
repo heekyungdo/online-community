@@ -47,6 +47,15 @@ thead {
   }
 `
 
+const TitleTd = styled.td`
+display:flex;
+align-items:center;
+justify-content:center;
+ img{
+  margin-right:3px;
+ }
+`
+
 const Bottom = styled.div`
   display: flex;
   align-items: center;
@@ -71,8 +80,8 @@ const Community = ({ isAuth }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const fireStore = getFirestore(app);
-const perPage= 5;
-const [currentPage, setCurrentPage]=useState(1)
+  const perPage= 5;
+  const [currentPage, setCurrentPage]=useState(1)
   const [posts, setPosts] = useState([]);
   const indexOfFirst = (currentPage-1)*perPage
   const indexOfLast = indexOfFirst+perPage
@@ -82,13 +91,12 @@ const [currentPage, setCurrentPage]=useState(1)
     const valRef = await collection(fireStore, "post");
     const data = await getDocs(query(valRef, orderBy("date")));
     const allData = data.docs.map((val,index) => ({ ...val.data(), id: val.id ,index:index}));
-    console.log(typeof allData)
     setPosts(allData)
     dispatch(postData(allData));
   };
 
   useEffect(()=>{
-getData()
+    getData()
   },[])
 
   const list = [
@@ -122,33 +130,32 @@ getData()
   };
 
   const updatedDate = (date)=>{
-const now = dayjs()
-const yesterday = now.add(1,'day')
-const updatedDate = dayjs(date)
-const hourDiff = now.diff(updatedDate, 'hour') 
+    const now = dayjs()
+    const yesterday = now.add(1,'day')
+    const updatedDate = dayjs(date)
+    const hourDiff = now.diff(updatedDate, 'hour') 
 
-if(hourDiff>24){
-  return updatedDate.format('YY/MM/DD')
-} else {
-  return updatedDate.format('HH:mm:ss')
-}
+    if(hourDiff>24){
+      return updatedDate.format('YY/MM/DD')
+    } else {
+      return updatedDate.format('HH:mm:ss')
+      }
   }
 
   const setImageType = (images)=>{
-if(images.length===0){
-  return iconText
-} else {
-  return iconImage
-}
+    if(images.length===0){
+      return iconText
+  } else {
+      return iconImage
+    }
   }
-
 
   const renderData = (
    posts?.length>0 && posts?.slice(indexOfFirst,indexOfLast).map((post)=>(
       <tr key={post.id} onClick={()=>goToDetail(post.index)}>
         <td>{(post.index)+1}</td>
         <td>{post.writer}</td>
-        <td><img src={setImageType(post.images)} alt='image'/>{" "}{post.title}</td>
+        <TitleTd><img src={setImageType(post.images)} alt='image'/>{post.title}</TitleTd>
         <td>{updatedDate(post.date)}</td>
         <td>조회수</td>
       </tr>

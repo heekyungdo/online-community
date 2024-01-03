@@ -33,21 +33,19 @@ const ButtonGroup = styled.div`
 
   button {
     padding: 10px 30px;
+    border-radius: 4px;
+    cursor: pointer;
   }
 `;
 
-const FirstBtn = styled.button`
+const CancleBtn = styled.button`
   background: fafafa;
   color: #606060;
   border: 1px solid #b1b1;
-  border-radius: 4px;
-  cursor: pointer;
 `;
-const SecondBtn = styled.button`
+const UploadBtn = styled.button`
   background: #add8e6;
   border: 1px solid #add8e6;
-  border-radius: 4px;
-  cursor: pointer;
 `;
 
 const Upload = () => {
@@ -69,6 +67,7 @@ const Upload = () => {
     const postInfo = {
       // id:setId(prev=>prev+1),
       writer: userInfo.name,
+      userId:userInfo.id,
       date: new Date().toISOString(),
       ...post,
     };
@@ -133,8 +132,8 @@ const Upload = () => {
         </div>
         <ImageUpload images={post.images} onImageChange={handleImages} />
         <ButtonGroup>
-          <FirstBtn onClick={handleCancle}>취소</FirstBtn>
-          <SecondBtn type="submit">작성완료</SecondBtn>
+          <CancleBtn onClick={handleCancle}>취소</CancleBtn>
+          <UploadBtn type="submit">작성완료</UploadBtn>
         </ButtonGroup>
       </form>
     </div>

@@ -26,9 +26,6 @@ margin:7px 0;
 font-size:15px;
 `
 
-const ContentsTitle = styled.div`
-
-`
 const Contents = styled.div`
 margin-top:20px;
 border-top:1px solid #dbdada;
@@ -41,10 +38,36 @@ width:100%;
 height:300px;
 `
 
+const ButtonGroup = styled.div`
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  margin-top:20px;
+
+  button{
+    cursor:pointer;
+    padding:7px 15px;
+    border-radius: 4px;
+  }
+`
+
+const DeleteBtn = styled.button`
+margin-right:15px;
+background: fafafa;
+color: #606060;
+border: 1px solid #b1b1;
+`
+
+const UpdateBtn = styled.button`
+background: #add8e6;
+border: 1px solid #add8e6;
+`
+
 const Detail = () => {
   const params = useParams();
   const [post, setPost] = useState({});
-const postInfo = useSelector((state)=>state.post?.postInfo)
+  const postInfo = useSelector((state)=>state.post?.postInfo);
+  const user = useSelector((state)=>state.user?.userData)
 
   useEffect(() => {
     const data = postInfo[params.id]
@@ -74,6 +97,12 @@ const postInfo = useSelector((state)=>state.post?.postInfo)
           </Contents>
         </ContentsWrapper>
       )}
+      {user?.id===post?.userId ?(
+         <ButtonGroup>
+            <DeleteBtn>삭제</DeleteBtn>
+            <UpdateBtn>수정</UpdateBtn>
+          </ButtonGroup>
+          ):null}
       <CommentInput/>
       <CommentList/>
     </div>
