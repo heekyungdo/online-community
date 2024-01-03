@@ -41,14 +41,23 @@ cursor:pointer;
 `
 
 const CommentInput = () => {
+
+    const handleSubmit = (e)=>{
+e.preventDefault();
+    }
+
+const addComment = ()=>{
+    
+}
+
   return (
   <div>
     <CommentTitle>댓글쓰기</CommentTitle>
-    <form>
+    <form onSubmit={handleSubmit}>
     <label htmlFor="comment"></label>
     <CommentEditor>
     <TextArea id="comment" placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.'/>
-        <Button>등록</Button>
+        <Button type='submit' onClick={addComment}>등록</Button>
     </CommentEditor>
    </form>
   </div>

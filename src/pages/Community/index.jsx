@@ -80,8 +80,8 @@ const [currentPage, setCurrentPage]=useState(1)
 
   const getData = async () => {
     const valRef = await collection(fireStore, "post");
-    const data = await getDocs(query(valRef, orderBy("date", "desc")));
-    const allData = data.docs.map((val) => ({ ...val.data(), id: val.id }));
+    const data = await getDocs(query(valRef, orderBy("date")));
+    const allData = data.docs.map((val,index) => ({ ...val.data(), id: val.id ,index:index}));
     console.log(allData)
     setPosts(allData)
     dispatch(postData(allData));
@@ -118,6 +118,9 @@ getData()
   };
 
   const goToDetail = (index) => {
+    console.log(index)
+    const postDetail = posts[index]
+    console.log('ff',postDetail)
     navigate(`/board/${index}`);
   };
 
@@ -144,9 +147,9 @@ if(images.length===0){
 
 
   const renderData = (
-   posts?.length>0 && posts?.slice(indexOfFirst,indexOfLast).map((post,index)=>(
-      <tr key={post.id} onClick={()=>goToDetail(index)}>
-        <td>{index+1}</td>
+   posts?.length>0 && posts?.slice(indexOfFirst,indexOfLast).map((post)=>(
+      <tr key={post.id} onClick={()=>goToDetail(post.index)}>
+        <td>{(post.index)+1}</td>
         <td>{post.writer}</td>
         <td><img src={setImageType(post.images)} alt='image'/>{" "}{post.title}</td>
         <td>{updatedDate(post.date)}</td>

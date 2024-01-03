@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from "react";
 import Notice from "../../components/Notice";
-import { collection, getDocs, getFirestore } from "firebase/firestore";
+import { collection, getDocs, getFirestore, orderBy, query } from "firebase/firestore";
 import app from "../../utils/firebase";
 import { useParams } from "react-router-dom";
 import styled from 'styled-components'
 import dayjs from 'dayjs'
 import CommentInput from "../../components/CommentInput";
+import CommentList from "../../components/CommentList";
 
 const ContentsWrapper = styled.div`
 margin-top:50px;
 border:1px solid #dbdada;
 padding:15px 20px;
+min-height:50vh;
 `
+
+const PostTitle = styled.p`
+font-size:24px;
+word-break: break-all;
+word-wrap: break-word;
+latter-spacing:-1px;
+`
+
 const PostInfo = styled.p`
 margin:7px 0;
 font-size:15px;
@@ -39,7 +49,7 @@ const Detail = () => {
 
   const getData = async () => {
     const valRef = await collection(fireStore, "post");
-    const data = await getDocs(valRef);
+    const data = await getDocs(query(valRef, orderBy("date")));
     const allData = data.docs.map((val) => ({ ...val.data(), id: val.id }));
     setPost(allData[params.id]);
   };
@@ -54,7 +64,7 @@ const Detail = () => {
       {post && (
         <ContentsWrapper>
           <div>
-            <h2>{post.title}</h2>
+            <PostTitle>{post.title}</PostTitle>
             <PostInfo>이름: {post.writer}</PostInfo>
             <PostInfo>등록일: {dayjs(post.date).format('YYYY-MM-DD')}</PostInfo>
             <PostInfo>조회수: </PostInfo>
@@ -72,6 +82,7 @@ const Detail = () => {
         </ContentsWrapper>
       )}
       <CommentInput/>
+      <CommentList/>
     </div>
   );
 };
