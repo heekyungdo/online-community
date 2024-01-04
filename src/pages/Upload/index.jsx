@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Notice from "../../components/Notice";
 import styled from "styled-components";
+import Form from '../../components/Form'
 import ImageUpload from "../../components/ImageUpload";
 import { useSelector } from "react-redux";
 import app from "../../utils/firebase";
@@ -109,7 +110,8 @@ const Upload = () => {
   return (
     <div>
       <Notice />
-      <form onSubmit={handleSubmit}>
+      <Form submit={handleSubmit} title={post.title} changeBody={handleChange} description={post.description} images={post.images} imageChange={handleImages} status='upload'/>
+      {/* <form onSubmit={handleSubmit}>
         <TitleWrapper>
           <label htmlFor="title"></label>
           <input
@@ -132,10 +134,10 @@ const Upload = () => {
         </div>
         <ImageUpload images={post.images} onImageChange={handleImages} />
         <ButtonGroup>
-          <CancleBtn onClick={handleCancle}>취소</CancleBtn>
+          <CancleBtn>취소</CancleBtn>
           <UploadBtn type="submit">작성완료</UploadBtn>
         </ButtonGroup>
-      </form>
+      </form> */}
     </div>
   );
 };

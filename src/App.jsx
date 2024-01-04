@@ -16,6 +16,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import app from "./utils/firebase";
 import styled from "styled-components";
 import NotAuthRoutes from "./components/NotAuthRoutes";
+import Update from "./pages/Update";
 
 const auth = getAuth(app);
 
@@ -85,6 +86,7 @@ function App() {
           </Route>
           <Route path="/community" element={<Community isAuth={isAuth} />} />
           <Route path="/board/:id" element={<Detail />} />
+          <Route path="/update/:id" element={<Update/>}/>
         </Route>
       </Routes>
     </>

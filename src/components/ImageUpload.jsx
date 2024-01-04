@@ -97,7 +97,7 @@ const ImageUpload = ({ images, onImageChange }) => {
   return (
     <Wrapper>
       <ImageList>
-        {images.map((image, index) => (
+        {images?.map((image, index) => (
           <ImageWrapper key={index}>
             <UploadedImage src={image} alt={image} />
             <CloseImage

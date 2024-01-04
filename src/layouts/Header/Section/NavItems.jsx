@@ -19,6 +19,7 @@ const NavItems = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isAuth = useSelector((state) => state.user?.isAuth);
+const user = useSelector((state)=>state.user?.userData)
 
   const routes = [
     { to: "/login", name: "로그인", auth: false },
@@ -34,6 +35,7 @@ const NavItems = () => {
 
   return (
     <div>
+      <p>{user?.name}</p>
       <MenuWrapper>
         {routes.map((route) => {
           if (isAuth !== route.auth) return null;

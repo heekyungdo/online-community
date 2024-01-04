@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Notice from "../../components/Notice";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components'
 import dayjs from 'dayjs'
 import CommentInput from "../../components/CommentInput";
 import CommentList from "../../components/CommentList";
 import { useSelector } from "react-redux";
+import app from "../../utils/firebase";
+import { collection, doc, getFirestore} from "firebase/firestore";
 
 const ContentsWrapper = styled.div`
 margin-top:50px;
@@ -65,6 +67,7 @@ border: 1px solid #add8e6;
 
 const Detail = () => {
   const params = useParams();
+  const navigate = useNavigate()
   const [post, setPost] = useState({});
   const postInfo = useSelector((state)=>state.post?.postInfo);
   const user = useSelector((state)=>state.user?.userData)
@@ -73,6 +76,18 @@ const Detail = () => {
     const data = postInfo[params.id]
     setPost(data)
   }, [postInfo]);
+
+  const handleDelete = async (postId)=>{
+ 
+  }
+
+  const handleUpdate = ()=>{
+//     postId = postInfo[params.id]
+
+//     const postData = firestore.collection("post");
+// postData.doc(postId).update({ hobby: 'game' });
+  navigate('/update/'+params.id)
+  }
 
   return (
     <div>
@@ -99,8 +114,8 @@ const Detail = () => {
       )}
       {user?.id===post?.userId ?(
          <ButtonGroup>
-            <DeleteBtn>삭제</DeleteBtn>
-            <UpdateBtn>수정</UpdateBtn>
+            <DeleteBtn onClick={()=>handleDelete(post.id)}>삭제</DeleteBtn>
+            <UpdateBtn onClick={handleUpdate}>수정</UpdateBtn>
           </ButtonGroup>
           ):null}
       <CommentInput/>
