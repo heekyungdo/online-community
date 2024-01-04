@@ -4,7 +4,7 @@ import Form from '../../components/Form'
 import { useSelector } from "react-redux";
 import app from "../../utils/firebase";
 import { useNavigate, useParams } from "react-router-dom";
-import { collection, addDoc, getFirestore } from "firebase/firestore";
+import { collection, doc, setDoc, getFirestore, updateDoc } from "firebase/firestore";
 
 const Update = () => {
     const fireStore = getFirestore(app);
@@ -37,14 +37,11 @@ setWrittenPost(postDetail[id])
       };
   
       // fireStore에 db 저장
-      await addDoc(valRef, postInfo);
-  
-      await setPost({
-        title: "",
-        description: "",
-        images: [],
-      });
-  
+      const updateRef = doc(fireStore, "post", writtenPost.id);
+      await updateDoc(updateRef, postInfo);
+    
+
+    
       // navigate("/community");
     };
   

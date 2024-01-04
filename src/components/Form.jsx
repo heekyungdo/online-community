@@ -45,7 +45,6 @@ const UploadBtn = styled.button`
 `;
 
 const Form = ({submit,title,changeBody,description,images,imageChange,status}) => {
-  
     if(status==='update'&&!title && !description) return 
     
   return (

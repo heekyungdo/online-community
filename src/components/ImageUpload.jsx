@@ -71,7 +71,7 @@ const ImageUpload = ({ images, onImageChange }) => {
     if (!file) return null;
     const id = new Date();
     const storageRef = ref(storage, `images/${file.name}_${id}`);
-
+console.log(e.target.files)
     await uploadBytes(storageRef, file).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((imageUrl) => {
         onImageChange([...images, imageUrl]);

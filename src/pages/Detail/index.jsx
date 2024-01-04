@@ -66,14 +66,14 @@ border: 1px solid #add8e6;
 `
 
 const Detail = () => {
-  const params = useParams();
+  const {id} = useParams();
   const navigate = useNavigate()
   const [post, setPost] = useState({});
   const postInfo = useSelector((state)=>state.post?.postInfo);
   const user = useSelector((state)=>state.user?.userData)
 
   useEffect(() => {
-    const data = postInfo[params.id]
+    const data = postInfo[id]
     setPost(data)
   }, [postInfo]);
 
@@ -82,11 +82,7 @@ const Detail = () => {
   }
 
   const handleUpdate = ()=>{
-//     postId = postInfo[params.id]
-
-//     const postData = firestore.collection("post");
-// postData.doc(postId).update({ hobby: 'game' });
-  navigate('/update/'+params.id)
+  navigate('/update/'+id)
   }
 
   return (
