@@ -6,8 +6,9 @@ import dayjs from 'dayjs'
 import CommentInput from "../../components/CommentInput";
 import CommentList from "../../components/CommentList";
 import { useSelector } from "react-redux";
+import { doc, updateDoc, deleteField, getFirestore, deleteDoc } from "firebase/firestore";
 import app from "../../utils/firebase";
-import { collection, doc, getFirestore} from "firebase/firestore";
+import Swal from 'sweetalert2'
 
 const ContentsWrapper = styled.div`
 margin-top:50px;
@@ -43,7 +44,7 @@ height:300px;
 const ButtonGroup = styled.div`
   display:flex;
   align-items:center;
-  justify-content:flex-end;
+  justify-content:space-between;
   margin-top:20px;
 
   button{
@@ -53,6 +54,9 @@ const ButtonGroup = styled.div`
   }
 `
 
+const ListBtn = styled.button`
+border: 1px solid #b1b1;
+`
 const DeleteBtn = styled.button`
 margin-right:15px;
 background: fafafa;
@@ -66,6 +70,7 @@ border: 1px solid #add8e6;
 `
 
 const Detail = () => {
+  const fireStore = getFirestore(app);
   const {id} = useParams();
   const navigate = useNavigate()
   const [post, setPost] = useState({});
@@ -78,7 +83,26 @@ const Detail = () => {
   }, [postInfo]);
 
   const handleDelete = async (postId)=>{
- 
+Swal.fire({
+  title: "정말 삭제하시겠습니까?",
+  text: "삭제 후에는 복구 하실 수 없습니다.",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "삭제",
+  cancelButtonText:'취소',
+}).then((result) => {
+  if (result.isConfirmed) {
+     deleteDoc(doc(fireStore, "post", postId)).then(()=>{
+      Swal.fire({
+        title: "삭제되었습니다.",
+        icon: "success"
+      });
+      navigate('/community')
+     })
+  }
+});
   }
 
   const handleUpdate = ()=>{
@@ -110,8 +134,11 @@ const Detail = () => {
       )}
       {user?.id===post?.userId ?(
          <ButtonGroup>
+          <ListBtn onClick={()=>navigate('/community')}>목록</ListBtn>
+          <div>
             <DeleteBtn onClick={()=>handleDelete(post.id)}>삭제</DeleteBtn>
             <UpdateBtn onClick={handleUpdate}>수정</UpdateBtn>
+            </div>
           </ButtonGroup>
           ):null}
       <CommentInput/>
