@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import Notice from "../../components/Notice";
 import styled from "styled-components";
 import Form from '../../components/Form'
-import ImageUpload from "../../components/ImageUpload";
 import { useSelector } from "react-redux";
 import app from "../../utils/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { collection, addDoc, getFirestore } from "firebase/firestore";
+import Swal from 'sweetalert2'
 
 const TitleWrapper = styled.div`
   margin: 30px 0 10px;
@@ -52,7 +52,7 @@ const UploadBtn = styled.button`
 const Upload = () => {
   const fireStore = getFirestore(app);
   const navigate = useNavigate();
-
+const {id}=useParams();
   const [post, setPost] = useState({
     title: "",
     description: "",
@@ -64,7 +64,6 @@ const Upload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const postInfo = {
       // id:setId(prev=>prev+1),
       writer: userInfo.name,
@@ -74,15 +73,9 @@ const Upload = () => {
     };
 
     // fireStore에 db 저장
-    await addDoc(valRef, postInfo);
-
-    await setPost({
-      title: "",
-      description: "",
-      images: [],
-    });
-
-    // navigate("/community");
+    await addDoc(valRef, postInfo).then(()=>{
+      navigate("/community");
+      })
   };
 
   const handleChange = (e) => {
@@ -101,43 +94,25 @@ const Upload = () => {
   };
 
   const handleCancle = ()=>{
-    if(window.confirm('정말 취소 하시겠습니까?')){
-      navigate('/')
-    } else {
-      alert('')
-    }
+    Swal.fire({
+      title: "정말 취소하시겠습니까?",
+      text: "취소 후에는 복구 하실 수 없습니다.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "목록으로 가기",
+      cancelButtonText:'취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+          navigate('/community')
+      }
+    });
   }
   return (
     <div>
       <Notice />
-      <Form submit={handleSubmit} title={post.title} changeBody={handleChange} description={post.description} images={post.images} imageChange={handleImages} status='upload'/>
-      {/* <form onSubmit={handleSubmit}>
-        <TitleWrapper>
-          <label htmlFor="title"></label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            placeholder="제목을 입력해주세요"
-            value={post.title}
-            onChange={handleChange}
-          />
-        </TitleWrapper>
-        <div>
-          <label htmlFor="description"></label>
-          <TextArea
-            id="description"
-            name="description"
-            value={post.description}
-            onChange={handleChange}
-          />
-        </div>
-        <ImageUpload images={post.images} onImageChange={handleImages} />
-        <ButtonGroup>
-          <CancleBtn>취소</CancleBtn>
-          <UploadBtn type="submit">작성완료</UploadBtn>
-        </ButtonGroup>
-      </form> */}
+      <Form submit={handleSubmit} title={post.title} changeBody={handleChange} description={post.description} images={post.images} imageChange={handleImages} postCancle={handleCancle} status='upload'/>
     </div>
   );
 };

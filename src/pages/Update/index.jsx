@@ -5,12 +5,13 @@ import { useSelector } from "react-redux";
 import app from "../../utils/firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import { collection, doc, setDoc, getFirestore, updateDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 const Update = () => {
     const fireStore = getFirestore(app);
     const navigate = useNavigate();
-  const {id} = useParams();
-  const [writtenPost, setWrittenPost] = useState({})
+    const {id} = useParams();
+    const [writtenPost, setWrittenPost] = useState({})
     const [post, setPost] = useState({
       title: "",
       description: "",
@@ -19,7 +20,6 @@ const Update = () => {
   
     const userInfo = useSelector((state) => state.user?.userData);
     const postDetail = useSelector((state)=>state.post?.postInfo)
-    const valRef = collection(fireStore, "post");
 
   useEffect(()=>{
 setWrittenPost(postDetail[id])
@@ -38,15 +38,15 @@ setWrittenPost(postDetail[id])
   
       // fireStore에 db 저장
       const updateRef = doc(fireStore, "post", writtenPost.id);
-      await updateDoc(updateRef, postInfo);
-    
-
-    
-      // navigate("/community");
+      await updateDoc(updateRef, postInfo).then(()=>{
+        toast.success("수정되었습니다.");
+        navigate('/board/' + id);
+      })
     };
   
     const handleChange = (e) => {
       const { name, value } = e.target;
+console.log(value)
       setPost((prevState) => ({
         ...prevState,
         [name]: value,

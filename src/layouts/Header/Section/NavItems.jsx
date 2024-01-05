@@ -6,10 +6,20 @@ import styled from "styled-components";
 
 const MenuWrapper = styled.ul`
   display: flex;
+  align-items:center;
 `;
 
+const UserName = styled.p`
+margin-right:20px;
+border-top: 3px solid lightblue;
+border-bottom: 3px solid lightblue;
+padding:3px;
+`
 const MenuList = styled.li`
   list-style: none;
+  &:last-child { 
+    margin-left: 15px; 
+  }
 `;
 const Menu = styled.p`
   text-decoration: none;
@@ -34,9 +44,9 @@ const user = useSelector((state)=>state.user?.userData)
   };
 
   return (
-    <div>
-      <p>{user?.name}</p>
+    <>
       <MenuWrapper>
+      <UserName>{user?.name}</UserName>
         {routes.map((route) => {
           if (isAuth !== route.auth) return null;
           if (route.name === "로그아웃") {
@@ -60,7 +70,7 @@ const user = useSelector((state)=>state.user?.userData)
           }
         })}
       </MenuWrapper>
-    </div>
+    </>
   );
 };
 

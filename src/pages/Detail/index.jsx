@@ -95,10 +95,6 @@ Swal.fire({
 }).then((result) => {
   if (result.isConfirmed) {
      deleteDoc(doc(fireStore, "post", postId)).then(()=>{
-      Swal.fire({
-        title: "삭제되었습니다.",
-        icon: "success"
-      });
       navigate('/community')
      })
   }

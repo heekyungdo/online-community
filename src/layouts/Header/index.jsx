@@ -3,25 +3,27 @@ import NavItems from "./Section/NavItems";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+const TopHeader = styled.header`
+padding:10px 30px;
+border-bottom:1px solid lightgray;
+`
+
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin: 0 auto;
-  color: #bf4f74;
 `;
 
 const Logo = styled.p`
-  font-size: 1.5em;
+  font-size: 1.7em;
 `;
 
 const Header = () => {
   return (
-    <header>
+    <TopHeader>
       <Wrapper>
         <div>
-          {" "}
           <Logo>
             <Link to="/">GOSSIP</Link>
           </Logo>
@@ -30,7 +32,7 @@ const Header = () => {
           <NavItems />
         </div>
       </Wrapper>
-    </header>
+    </TopHeader>
   );
 };
 

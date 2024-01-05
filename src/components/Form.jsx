@@ -44,8 +44,8 @@ const UploadBtn = styled.button`
   border: 1px solid #add8e6;
 `;
 
-const Form = ({submit,title,changeBody,description,images,imageChange,status}) => {
-    if(status==='update'&&!title && !description) return 
+const Form = ({submit,title,changeBody,description,images,imageChange,postCancle,status}) => {
+    if(status==='update' && !title && !description) return 
     
   return (
     <form onSubmit={submit}>
@@ -73,7 +73,7 @@ const Form = ({submit,title,changeBody,description,images,imageChange,status}) =
         </div>
         <ImageUpload images={images} onImageChange={imageChange} />
         <ButtonGroup>
-          <CancleBtn>취소</CancleBtn>
+          <CancleBtn onClick={postCancle}>취소</CancleBtn>
           <UploadBtn type="submit">작성완료</UploadBtn>
         </ButtonGroup>
       </form>

@@ -40,10 +40,11 @@ const Pagination = ({handleCurrentPage, currentPage,lastPage}) => {
     <PaginationWrapper>
         <Button onClick={()=>handleCurrentPage(1)} disabled={currentPage===1}>{"<<"}</Button>
         <Button onClick={()=>handleCurrentPage(currentPage-1)} disabled={currentPage===1}>{"<"}</Button>
-<ButtonUl>
+        <ButtonUl>
         {pageNumbers.map(number=>(
-            <ButtonList key={number} $clicked={number} $current={currentPage}>
-                <span onClick={()=>handleCurrentPage(number)}>{number}</span>
+            <ButtonList key={number} $clicked={number} $current={currentPage} 
+            onClick={()=>handleCurrentPage(number)}>
+                <span>{number}</span>
             </ButtonList>
         ))}
         </ButtonUl>

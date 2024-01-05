@@ -47,6 +47,10 @@ thead {
   }
 `
 
+const WriterTd = styled.td`
+color: #374273;
+`
+
 const TitleTd = styled.td`
 display:flex;
 align-items:center;
@@ -154,7 +158,7 @@ const Community = ({ isAuth }) => {
    posts?.length>0 && posts?.slice(indexOfFirst,indexOfLast).map((post)=>(
       <tr key={post.id} onClick={()=>goToDetail(post.index)}>
         <td>{(post.index)+1}</td>
-        <td>{post.writer}</td>
+        <WriterTd>{post.writer}</WriterTd>
         <TitleTd><img src={setImageType(post.images)} alt='image'/>{post.title}</TitleTd>
         <td>{updatedDate(post.date)}</td>
         <td>조회수</td>
