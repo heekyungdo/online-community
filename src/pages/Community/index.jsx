@@ -21,7 +21,7 @@ import Pagination from "./Section/Pagination";
 
 const MainTable = styled.div`
   margin: 50px 0 0;
-`;
+`
 
 const Table = styled.table`
   width: 100%;
@@ -69,7 +69,7 @@ const Bottom = styled.div`
   label {
     margin-right: 7px;
   }
-`;
+`
 
 const BtnWrapper = styled.div`
   margin-left: 20px;
@@ -78,7 +78,7 @@ const BtnWrapper = styled.div`
     padding: 5px 10px;
     font-weight: bold;
   }
-`;
+`
 
 const Community = ({ isAuth }) => {
   const dispatch = useDispatch();
@@ -161,7 +161,6 @@ const Community = ({ isAuth }) => {
         <WriterTd>{post.writer}</WriterTd>
         <TitleTd><img src={setImageType(post.images)} alt='image'/>{post.title}</TitleTd>
         <td>{updatedDate(post.date)}</td>
-        <td>조회수</td>
       </tr>
     ))
   )
@@ -177,7 +176,6 @@ const Community = ({ isAuth }) => {
               <th>글쓴이</th>
               <th>제목</th>
               <th>등록일</th>
-              <th>조회</th>
             </tr>
           </thead>
           <tbody>

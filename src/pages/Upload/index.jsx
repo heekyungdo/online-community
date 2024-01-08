@@ -15,7 +15,7 @@ const TitleWrapper = styled.div`
     width: 100%;
     box-sizing: border-box;
   }
-`;
+`
 
 const TextArea = styled.textarea`
   width: 100%;
@@ -24,7 +24,7 @@ const TextArea = styled.textarea`
   box-sizing: border-box;
   word-wrap: break-word;
   word-break: break-word;
-`;
+`
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -37,17 +37,17 @@ const ButtonGroup = styled.div`
     border-radius: 4px;
     cursor: pointer;
   }
-`;
+`
 
 const CancleBtn = styled.button`
   background: fafafa;
   color: #606060;
   border: 1px solid #b1b1;
-`;
+`
 const UploadBtn = styled.button`
   background: #add8e6;
   border: 1px solid #add8e6;
-`;
+`
 
 const Upload = () => {
   const fireStore = getFirestore(app);

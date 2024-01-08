@@ -13,17 +13,17 @@ const Update = () => {
     const {id} = useParams();
     const [writtenPost, setWrittenPost] = useState({})
     const [post, setPost] = useState({
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       images: [],
     });
   
     const userInfo = useSelector((state) => state.user?.userData);
-    const postDetail = useSelector((state)=>state.post?.postInfo)
+    const postDetail = useSelector((state)=>state.post?.postInfo);
 
   useEffect(()=>{
-setWrittenPost(postDetail[id])
-  },[postDetail])
+    setWrittenPost(postDetail[id])
+  },[])
 
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -40,18 +40,19 @@ setWrittenPost(postDetail[id])
       const updateRef = doc(fireStore, "post", writtenPost.id);
       await updateDoc(updateRef, postInfo).then(()=>{
         toast.success("수정되었습니다.");
-        navigate('/board/' + id);
+        // navigate('/board/' + id);
+        navigate('/community')
       })
     };
   
     const handleChange = (e) => {
-      const { name, value } = e.target;
-console.log(value)
-      setPost((prevState) => ({
+      let { name, value } = e.target;
+
+    setPost((prevState) => ({
         ...prevState,
         [name]: value,
       }));
-    };
+    }
 
     const handleImages = async (newImages) => {
         await setPost((prevState) => ({

@@ -114,7 +114,6 @@ Swal.fire({
             <PostTitle>{post.title}</PostTitle>
             <PostInfo>이름: {post.writer}</PostInfo>
             <PostInfo>등록일: {dayjs(post.date).format('YYYY-MM-DD')}</PostInfo>
-            <PostInfo>조회수: </PostInfo>
           </div>
 
           <Contents>

@@ -13,11 +13,11 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-`;
+`
 
 const Logo = styled.p`
   font-size: 1.7em;
-`;
+`
 
 const Header = () => {
   return (

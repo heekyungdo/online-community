@@ -7,7 +7,7 @@ import styled from "styled-components";
 const MenuWrapper = styled.ul`
   display: flex;
   align-items:center;
-`;
+`
 
 const UserName = styled.p`
 margin-right:20px;
@@ -20,10 +20,10 @@ const MenuList = styled.li`
   &:last-child { 
     margin-left: 15px; 
   }
-`;
+`
 const Menu = styled.p`
   text-decoration: none;
-`;
+`
 
 const NavItems = () => {
   const dispatch = useDispatch();
