@@ -41,14 +41,28 @@ cursor:pointer;
 `
 
 const CommentInput = () => {
+    const userInfo = useSelector((state) => state.user?.userData);
+
+const [firstComemnt,setFirstComment]=useState('')
 
     const handleSubmit = (e)=>{
 e.preventDefault();
-    }
 
-const addComment = ()=>{
-    
-}
+const commentInfo = {
+    writer:userInfo.name,
+    date: new Date().toISOString(),
+    ...firstComemnt
+
+    }
+    }
+    const handleComment = (e)=>{
+        let {value} = e.target;
+
+        setFirstComment((prevState)=>({
+            ...prevState,
+            value
+        }))
+    }
 
   return (
   <div>
@@ -56,8 +70,8 @@ const addComment = ()=>{
     <form onSubmit={handleSubmit}>
     <label htmlFor="comment"></label>
     <CommentEditor>
-    <TextArea id="comment" placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.'/>
-        <Button type='submit' onClick={addComment}>등록</Button>
+    <TextArea id="comment" placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.' onChange={handleComment}/>
+        <Button type='submit'>등록</Button>
     </CommentEditor>
    </form>
   </div>

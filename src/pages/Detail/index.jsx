@@ -38,7 +38,7 @@ padding:15px 20px 0 0;
 const Image = styled.img`
 max-width:500px;
 width:100%;
-height:300px;
+min-height:300px;
 `
 
 const ButtonGroup = styled.div`

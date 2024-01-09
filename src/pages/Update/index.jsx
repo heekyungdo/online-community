@@ -4,7 +4,7 @@ import Form from '../../components/Form'
 import { useSelector } from "react-redux";
 import app from "../../utils/firebase";
 import { useNavigate, useParams } from "react-router-dom";
-import { collection, doc, setDoc, getFirestore, updateDoc } from "firebase/firestore";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 
 const Update = () => {
