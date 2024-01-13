@@ -22,13 +22,15 @@ const auth = getAuth(app);
 
 const Contents = styled.main`
   max-width: 1420px;
-  padding: 70px 50px;
-  margin: 0 auto auto;
+  padding: 80px 50px;
+  margin: 0 auto;
+  height: auto;
+  min-height: calc(100vh - 50px);
 `;
 
 function Layout() {
   return (
-    <div>
+    <>
       <ToastContainer
         position="bottom-right"
         theme="light"
@@ -40,7 +42,7 @@ function Layout() {
         <Outlet />
       </Contents>
       <Footer />
-    </div>
+      </>
   );
 }
 

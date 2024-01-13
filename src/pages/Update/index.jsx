@@ -37,13 +37,12 @@ const Update = () => {
         description:post.description?post.description:writtenPost.description,
         images:post.images?post.images:writtenPost.images
       };
-      
+
       // fireStore에 db 저장
       const updateRef = doc(fireStore, "post", writtenPost.id);
       await updateDoc(updateRef, postInfo).then(()=>{
         toast.success("수정되었습니다.");
-        // navigate('/board/' + id);
-        // navigate('/community')
+        navigate('/community')
       })
     };
   console.log(writtenPost)

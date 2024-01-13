@@ -12,18 +12,18 @@ const LoginWrapper = styled.div`
   box-shadow: 3px 2px 5px 3px lightgray;
   border-radius: 5px;
   padding: 25px 0;
-`;
+`
 
 const LoginForm = styled.form`
   max-width: 400px;
   width: 100%;
   margin: 0 auto;
-`;
+`
 
 const LoginInputBox = styled.div`
   margin: 30px 0;
   width: 100%;
-`;
+`
 
 const LoginInput = styled.input`
   border-radius: 4px;
@@ -36,13 +36,14 @@ const LoginInput = styled.input`
   &::placeholder {
     color: #d2d2d2;
   }
-`;
+`
+
 const ValidationError = styled.span`
   color: #c63d2f;
   font-size: 13px;
   display: flex;
   margin: 5px 0 0 10px;
-`;
+`
 
 const BtnWrapper = styled.div`
   margin-top: 40px;
@@ -61,7 +62,7 @@ const BtnWrapper = styled.div`
       opacity: 0.8;
     }
   }
-`;
+`
 
 const GoRegisterWrapper = styled.p`
   margin-top: 15px;
@@ -71,7 +72,7 @@ const GoRegisterWrapper = styled.p`
     color: black;
     opacity: 0.5;
   }
-`;
+`
 
 const Login = () => {
   const {

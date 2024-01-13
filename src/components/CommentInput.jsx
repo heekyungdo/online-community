@@ -1,6 +1,10 @@
+import { addDoc, collection, doc, getFirestore, setDoc, updateDoc } from 'firebase/firestore'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+import app from "../utils/firebase";
+import { useParams } from 'react-router-dom';
+import { set } from 'react-hook-form';
 
 const CommentTitle = styled.p`
 font-size:16px;
@@ -42,28 +46,41 @@ cursor:pointer;
 `
 
 const CommentInput = () => {
+  const fireStore = getFirestore(app);
+  const {id} = useParams();
+
     const userInfo = useSelector((state) => state.user?.userData);
+    const postInfo = useSelector((state)=>state.post?.postInfo)
+    const valRef = collection(fireStore, "post");
+    const currentPost = postInfo[id]
+    const [comments,setComments]=useState({
+       
+    })
 
-const [firstComemnt,setFirstComment]=useState('')
-
-    const handleSubmit = (e)=>{
+    const handleSubmit = async (e)=>{
 e.preventDefault();
+const commentsRef = doc(fireStore, "post", currentPost.id);
 
 const commentInfo = {
-    writer:userInfo.name,
-    date: new Date().toISOString(),
-    ...firstComemnt
+    wirter:userInfo.name,
+    id:userInfo.id,
+    createdAt:new Date().toISOString(),
+    ...comments
+    };
 
-    }
-    }
+    await updateDoc(commentsRef,commentInfo).then(()=>{
+        console.log('댓글')
+    }); 
+ };
+
     const handleComment = (e)=>{
         let {value} = e.target;
 
-        setFirstComment((prevState)=>({
+        setComments((prevState) => ({
             ...prevState,
-            value
-        }))
-    }
+            comments: value,
+          }));
+    };
 
   return (
   <div>
@@ -79,4 +96,4 @@ const commentInfo = {
   )
 }
 
-export default CommentInput
+export default CommentInput;

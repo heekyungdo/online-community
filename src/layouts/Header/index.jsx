@@ -6,6 +6,11 @@ import styled from "styled-components";
 const TopHeader = styled.header`
 padding:10px 30px;
 border-bottom:1px solid lightgray;
+position:fixed;
+top: 0;
+z-index: 9;
+height:60px;
+width:100%;
 `
 
 const Wrapper = styled.div`

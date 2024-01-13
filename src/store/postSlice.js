@@ -8,7 +8,13 @@ const initialState={
     description:"",
     images:[],
     id:"",
-    index:0
+    index:0,
+    comment:[
+      {value:'',
+      createdAt:'',
+    writer:'',
+  writerId:''}
+    ]
   },
 }
   
