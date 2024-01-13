@@ -9,7 +9,6 @@ border-bottom:1px solid lightgray;
 position:fixed;
 top: 0;
 z-index: 9;
-height:60px;
 width:100%;
 `
 

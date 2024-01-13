@@ -10,15 +10,16 @@ const MenuWrapper = styled.ul`
 `
 
 const UserName = styled.p`
-margin-right:20px;
+margin-right:10px;
 border-top: 3px solid lightblue;
 border-bottom: 3px solid lightblue;
 padding:3px;
 `
 const MenuList = styled.li`
   list-style: none;
-  &:last-child { 
-    margin-left: 15px; 
+  margin-left:15px;
+  &:first-child { 
+    margin-left: none;
   }
 `
 const Menu = styled.p`
@@ -32,6 +33,7 @@ const NavItems = () => {
 const user = useSelector((state)=>state.user?.userData)
 
   const routes = [
+    { to: "/", name: "홈", auth: isAuth },
     { to: "/login", name: "로그인", auth: false },
     { to: "/register", name: "회원가입", auth: false },
     { to: "/community", name: "커뮤니티", auth: isAuth },
@@ -46,7 +48,8 @@ const user = useSelector((state)=>state.user?.userData)
   return (
     <>
       <MenuWrapper>
-      <UserName>{user?.name}</UserName>
+        {isAuth ? <UserName>{user?.name}</UserName>
+        :null}
         {routes.map((route) => {
           if (isAuth !== route.auth) return null;
           if (route.name === "로그아웃") {
