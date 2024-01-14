@@ -69,7 +69,7 @@ const CommentInput = () => {
       e.preventDefault();
       
       const commentInfo = {
-        wirter:userInfo.name,
+        writer:userInfo.name,
         id:userInfo.id,
         createdAt:new Date().toISOString(),
         comment:eachComment

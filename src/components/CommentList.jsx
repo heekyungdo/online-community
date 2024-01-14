@@ -76,34 +76,34 @@ const CommentList = () => {
 
   const getComments = async()=>{
     const valRef = await collection(fireStore, 'post');
-    const data = await getDocs(query(valRef,orderBy('date')));
-    const allData = data.docs.map(val=>({...val.data(), id:val.id}))
-    setComments(allData)
+    const data = await getDocs(query(valRef));
+    const allData = data.docs.map(val=>({...val.data(), id:val.id}));
+   const commentsArr =  allData.map(val=>val.comments);
+   for(let i of commentsArr){
+    setComments(i,...comments)
+   }
   }
 
   useEffect(()=>{
-    getComments()
+    getComments();
   },[])
-
-  console.log(comments)
-  console.log(user.id)
 
   const [commentAuth, setCommentAuth] = useState(false)
 
-  useEffect(()=>{
-    comments.id === user.id ? setCommentAuth(true) : setCommentAuth(false)
-  },[comments,user])
+  // useEffect(()=>{
+  //   comments.id === user.id ? setCommentAuth(true) : setCommentAuth(false)
+  // },[comments,user])
 
   return (
     <CommentsListWrapper>
-        <CommentsTitle><CommentCount>12</CommentCount>개의 댓글</CommentsTitle>
+        <CommentsTitle><CommentCount>{comments && comments.length}{" "}</CommentCount>개의 댓글</CommentsTitle>
         <div>
-          {comments.map(comment=>(
-          <CommentsList key={comment.date}>
+          {comments && comments.map((value,index)=>(
+          <CommentsList key={index}>
             <CommentTop>
               <CommentLeft>
-              <CommentWriter>{comment.writer}</CommentWriter>
-              <CommentDate>{dayjs(comment.date).format('YYYY.MM.DD HH:mm')}</CommentDate>
+              <CommentWriter>{value.writer}</CommentWriter>
+              <CommentDate>{dayjs(value.createdAt).format('YYYY.MM.DD HH:mm')}</CommentDate>
               </CommentLeft>
               {commentAuth?   
               <CommentRight>
@@ -113,7 +113,7 @@ const CommentList = () => {
               :null}
             </CommentTop>
             <CommentContent>
-            {comment.value}
+            {value.comment}
             </CommentContent>
           </CommentsList>
           ))}
