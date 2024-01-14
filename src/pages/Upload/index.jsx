@@ -53,14 +53,14 @@ const Upload = () => {
   const fireStore = getFirestore(app);
   const navigate = useNavigate();
 const {id}=useParams();
+const userInfo = useSelector((state) => state.user?.userData);
+const valRef = collection(fireStore, "post");
+
   const [post, setPost] = useState({
     title: "",
     description: "",
     images: [],
   });
-
-  const userInfo = useSelector((state) => state.user?.userData);
-  const valRef = collection(fireStore, "post");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,7 +80,6 @@ const {id}=useParams();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-console.log(name,':',value)
 
     setPost((prevState) => ({
       ...prevState,

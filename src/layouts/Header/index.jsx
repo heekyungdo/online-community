@@ -10,6 +10,7 @@ position:fixed;
 top: 0;
 z-index: 9;
 width:100%;
+background:#fff;
 `
 
 const Wrapper = styled.div`

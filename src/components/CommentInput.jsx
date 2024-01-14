@@ -1,10 +1,9 @@
-import { addDoc, collection, doc, getFirestore, setDoc, updateDoc } from 'firebase/firestore'
-import React, { useState } from 'react'
+import { arrayUnion, collection, doc, getDocs, getFirestore, orderBy, query, updateDoc } from 'firebase/firestore'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import app from "../utils/firebase";
 import { useParams } from 'react-router-dom';
-import { set } from 'react-hook-form';
 
 const CommentTitle = styled.p`
 font-size:16px;
@@ -51,35 +50,40 @@ const CommentInput = () => {
 
     const userInfo = useSelector((state) => state.user?.userData);
     const postInfo = useSelector((state)=>state.post?.postInfo)
-    const valRef = collection(fireStore, "post");
     const currentPost = postInfo[id]
-    const [comments,setComments]=useState({
-       
-    })
+    const [posts, setPosts] = useState([]);
+    const [eachComment, setEachComment] = useState('')
+
+    const getData = async () => {
+      const valRef = await collection(fireStore, "post");
+      const data = await getDocs(query(valRef, orderBy("date")));
+      const allData = data.docs.map((val,index) => ({ ...val.data(), id: val.id ,index:index}));
+      setPosts(...posts,allData);
+    };
+  
+    useEffect(()=>{
+      getData();
+    },[])
 
     const handleSubmit = async (e)=>{
-e.preventDefault();
-const commentsRef = doc(fireStore, "post", currentPost.id);
+      e.preventDefault();
+      
+      const commentInfo = {
+        wirter:userInfo.name,
+        id:userInfo.id,
+        createdAt:new Date().toISOString(),
+        comment:eachComment
+      };
 
-const commentInfo = {
-    wirter:userInfo.name,
-    id:userInfo.id,
-    createdAt:new Date().toISOString(),
-    ...comments
-    };
+      const commentsRef = doc(fireStore, "post", currentPost.id);
 
-    await updateDoc(commentsRef,commentInfo).then(()=>{
-        console.log('댓글')
-    }); 
+      await updateDoc(commentsRef, {
+        comments: arrayUnion(commentInfo)
+    }).then(()=>console.log('댓글등록 완료'));
  };
 
     const handleComment = (e)=>{
-        let {value} = e.target;
-
-        setComments((prevState) => ({
-            ...prevState,
-            comments: value,
-          }));
+       setEachComment(e.target.value);
     };
 
   return (

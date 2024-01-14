@@ -95,7 +95,8 @@ const Community = ({ isAuth }) => {
     const valRef = await collection(fireStore, "post");
     const data = await getDocs(query(valRef, orderBy("date")));
     const allData = data.docs.map((val,index) => ({ ...val.data(), id: val.id ,index:index}));
-    setPosts(allData)
+    // setPosts([allData, ...posts])
+    setPosts(...posts,allData)
     dispatch(postData(allData));
   };
 
