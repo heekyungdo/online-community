@@ -77,9 +77,11 @@ const CommentInput = () => {
 
       const commentsRef = doc(fireStore, "post", currentPost.id);
 
+      if(!eachComment) return;
+
       await updateDoc(commentsRef, {
         comments: arrayUnion(commentInfo)
-    }).then(()=>console.log('댓글등록 완료'));
+    }).then(()=>setEachComment(''));
  };
 
     const handleComment = (e)=>{
@@ -92,7 +94,7 @@ const CommentInput = () => {
     <form onSubmit={handleSubmit}>
     <label htmlFor="comment"></label>
     <CommentEditor>
-    <TextArea id="comment" placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.' onChange={handleComment}/>
+    <TextArea id="comment" placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.' onChange={handleComment} value={eachComment}/>
         <Button type='submit'>등록</Button>
     </CommentEditor>
    </form>

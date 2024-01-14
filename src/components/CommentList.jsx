@@ -58,6 +58,7 @@ color:red;
 `
 const UpdateButton = styled.button`
 color:gray;
+margin-left:5px;
 `
 
 const CommentContent = styled.div`
@@ -66,7 +67,8 @@ word-break: break-all;
     color: #434343;
     line-height: 1.5;
 font-size:13px;
-padding: 10px 0 15px 0;
+padding: 10px 0 15px 5px;
+
 `
 
 const CommentList = () => {
@@ -88,12 +90,6 @@ const CommentList = () => {
     getComments();
   },[])
 
-  const [commentAuth, setCommentAuth] = useState(false)
-
-  // useEffect(()=>{
-  //   comments.id === user.id ? setCommentAuth(true) : setCommentAuth(false)
-  // },[comments,user])
-
   return (
     <CommentsListWrapper>
         <CommentsTitle><CommentCount>{comments && comments.length}{" "}</CommentCount>개의 댓글</CommentsTitle>
@@ -105,7 +101,7 @@ const CommentList = () => {
               <CommentWriter>{value.writer}</CommentWriter>
               <CommentDate>{dayjs(value.createdAt).format('YYYY.MM.DD HH:mm')}</CommentDate>
               </CommentLeft>
-              {commentAuth?   
+              {value.id===user.id?   
               <CommentRight>
                 <DeleteButton>삭제</DeleteButton>
                 <UpdateButton>수정</UpdateButton>
