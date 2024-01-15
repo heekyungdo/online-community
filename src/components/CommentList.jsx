@@ -1,4 +1,4 @@
-import { arrayRemove, collection, doc, getDocs, getFirestore, orderBy, query, updateDoc } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, collection, doc, getDocs, getFirestore, orderBy, query, updateDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import app from '../utils/firebase'
@@ -21,22 +21,18 @@ const CommentList = () => {
     const data = await getDocs(query(valRef));
     const allData = data.docs.map(val=>({...val.data(), id:val.id}));
    const commentsArr =  allData.map(val=>val.comments);
-  //  console.log(commentsArr[id])
    setComments(commentsArr[id],...comments)
-
-  //  for(let i of commentsArr){
-  //   setComments(i,...comments)
-  //   console.log(i)
-  //  }
   }
   useEffect(()=>{
     getComments();
   },[])
 
   const onDeleteComment = async (index)=>{
-      await updateDoc(commentsRef, {
-        comments: arrayRemove()
+    if(window.confirm("삭제하시겠습니까?")) {
+      await updateDoc(commentsRef,{
+        comments:arrayRemove(comments[index])
       }).then(()=>console.log('삭제'))
+    }
   }
 
   const onUpdateComment = () =>{
@@ -47,7 +43,10 @@ const CommentList = () => {
 !setReplyBox != setReplyBox
   }
 
+  if(!comments) return;
+
   return (
+
     <CommentsListWrapper>
         <CommentsTitle><CommentCount>{comments && comments.length}{" "}</CommentCount>개의 댓글</CommentsTitle>
         <div>
