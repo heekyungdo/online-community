@@ -1,9 +1,86 @@
-import { collection, getDocs, getFirestore, orderBy, query } from 'firebase/firestore'
+import { arrayRemove, collection, doc, getDocs, getFirestore, orderBy, query, updateDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import app from '../utils/firebase'
 import dayjs from 'dayjs'
 import { useSelector } from 'react-redux'
+import CommentInput from './CommentInput'
+import { useParams } from 'react-router-dom'
+
+const CommentList = () => {
+  const fireStore = getFirestore(app);
+  const {id} = useParams();
+  const [comments, setComments] = useState([])
+  const user = useSelector((state)=>state.user?.userData)
+  const postInfo = useSelector((state)=>state.post?.postInfo)
+    const currentPost = postInfo[id]
+  const commentsRef = doc(fireStore, "post", currentPost.id);
+  const [replyBox, setReplyBox] = useState(false)
+  const getComments = async()=>{
+    const valRef = await collection(fireStore, 'post');
+    const data = await getDocs(query(valRef));
+    const allData = data.docs.map(val=>({...val.data(), id:val.id}));
+   const commentsArr =  allData.map(val=>val.comments);
+  //  console.log(commentsArr[id])
+   setComments(commentsArr[id],...comments)
+
+  //  for(let i of commentsArr){
+  //   setComments(i,...comments)
+  //   console.log(i)
+  //  }
+  }
+  useEffect(()=>{
+    getComments();
+  },[])
+
+  const onDeleteComment = async (index)=>{
+      await updateDoc(commentsRef, {
+        comments: arrayRemove()
+      }).then(()=>console.log('삭제'))
+  }
+
+  const onUpdateComment = () =>{
+
+  }
+
+  const toggleReply = ()=>{
+!setReplyBox != setReplyBox
+  }
+
+  return (
+    <CommentsListWrapper>
+        <CommentsTitle><CommentCount>{comments && comments.length}{" "}</CommentCount>개의 댓글</CommentsTitle>
+        <div>
+          {comments && comments.map((value,index)=>(
+          <CommentsList key={index}>
+            <CommentTop>
+              <CommentLeft>
+               <CommentWriter>{value.writer}</CommentWriter>
+               <CommentDate>{dayjs(value.createdAt).format('YYYY.MM.DD HH:mm')}</CommentDate>
+              </CommentLeft>
+              {value.id===user.id?   
+              <CommentRight>
+                <DeleteButton onClick={()=>onDeleteComment(index)}>삭제</DeleteButton>
+                <UpdateButton>수정</UpdateButton>
+              </CommentRight>
+              :null}
+            </CommentTop>
+            <CommentContent>
+            {value.comment}
+            </CommentContent>
+            <ReplyContent>
+             <ReplyCount>답글{" "}<span>10</span>개{" "}<span>▾</span></ReplyCount>
+             <p>|</p>
+             <ReplyBox onClick={toggleReply}>답글쓰기</ReplyBox>
+            </ReplyContent>
+          </CommentsList>
+          ))}
+        </div>
+    </CommentsListWrapper>
+  )
+}
+
+export default CommentList;
 
 const CommentsListWrapper = styled.div`
 margin:40px 0;
@@ -71,51 +148,21 @@ padding: 10px 0 15px 5px;
 
 `
 
-const CommentList = () => {
-  const fireStore = getFirestore(app);
-  const [comments, setComments] = useState([])
-  const user = useSelector((state)=>state.user?.userData)
+const ReplyContent = styled.div`
+display:flex;
+ p{
+  color: #999;
+  font-size:12px;
+  padding: 0 3px;
+ }
+`
 
-  const getComments = async()=>{
-    const valRef = await collection(fireStore, 'post');
-    const data = await getDocs(query(valRef));
-    const allData = data.docs.map(val=>({...val.data(), id:val.id}));
-   const commentsArr =  allData.map(val=>val.comments);
-   for(let i of commentsArr){
-    setComments(i,...comments)
-   }
-  }
+const ReplyCount = styled.p`
+ padding:none;
+ cursor:pointer;
+`
 
-  useEffect(()=>{
-    getComments();
-  },[])
-
-  return (
-    <CommentsListWrapper>
-        <CommentsTitle><CommentCount>{comments && comments.length}{" "}</CommentCount>개의 댓글</CommentsTitle>
-        <div>
-          {comments && comments.map((value,index)=>(
-          <CommentsList key={index}>
-            <CommentTop>
-              <CommentLeft>
-              <CommentWriter>{value.writer}</CommentWriter>
-              <CommentDate>{dayjs(value.createdAt).format('YYYY.MM.DD HH:mm')}</CommentDate>
-              </CommentLeft>
-              {value.id===user.id?   
-              <CommentRight>
-                <DeleteButton>삭제</DeleteButton>
-                <UpdateButton>수정</UpdateButton>
-              </CommentRight>
-              :null}
-            </CommentTop>
-            <CommentContent>
-            {value.comment}
-            </CommentContent>
-          </CommentsList>
-          ))}
-        </div>
-    </CommentsListWrapper>
-  )
-}
-
-export default CommentList;
+const ReplyBox = styled.p`
+padding:none;
+cursor:pointer;
+`
