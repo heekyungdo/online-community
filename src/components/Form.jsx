@@ -3,47 +3,6 @@ import styled from "styled-components";
 import ImageUpload from './ImageUpload';
 import PropTypes, { string } from 'prop-types'
 
-const TitleWrapper = styled.div`
-  margin: 30px 0 10px;
-  input {
-    padding: 7px 0;
-    width: 100%;
-    box-sizing: border-box;
-  }
-`
-
-const TextArea = styled.textarea`
-  width: 100%;
-  resize: none;
-  height: 50vh;
-  box-sizing: border-box;
-  word-wrap: break-word;
-  word-break: break-word;
-`
-
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-top: 20px;
-  border-top: 1px solid #ccc;
-
-  button {
-    padding: 10px 30px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-`
-
-const CancleBtn = styled.button`
-  background: fafafa;
-  color: #606060;
-  border: 1px solid #b1b1;
-`
-const UploadBtn = styled.button`
-  background: #add8e6;
-  border: 1px solid #add8e6;
-`
-
 const Form = ({submit,title,changeBody,description,images,imageChange,postCancle,status}) => {
     if(status === 'update' && !title && !description) return 
     
@@ -91,3 +50,44 @@ Form.propTypes={
 }
 
 export default Form;
+
+const TitleWrapper = styled.div`
+  margin: 30px 0 10px;
+  input {
+    padding: 7px 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+`
+
+const TextArea = styled.textarea`
+  width: 100%;
+  resize: none;
+  height: 50vh;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  word-break: break-word;
+`
+
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid #ccc;
+
+  button {
+    padding: 10px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+`
+
+const CancleBtn = styled.button`
+  background: fafafa;
+  color: #606060;
+  border: 1px solid #b1b1;
+`
+const UploadBtn = styled.button`
+  background: #add8e6;
+  border: 1px solid #add8e6;
+`

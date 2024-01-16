@@ -1,11 +1,12 @@
-import { arrayRemove, arrayUnion, collection, doc, getDocs, getFirestore, orderBy, query, updateDoc } from 'firebase/firestore'
+import { arrayRemove, collection, doc, getDocs, getFirestore, query, updateDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import app from '../utils/firebase'
 import dayjs from 'dayjs'
 import { useSelector } from 'react-redux'
-import CommentInput from './CommentInput'
 import { useParams } from 'react-router-dom'
+import downArrowImg from '../assets/images/down-arrow.svg'
+import upArrowImg from '../assets/images/up-arrow.svg'
 
 const CommentList = () => {
   const fireStore = getFirestore(app);
@@ -13,16 +14,19 @@ const CommentList = () => {
   const [comments, setComments] = useState([])
   const user = useSelector((state)=>state.user?.userData)
   const postInfo = useSelector((state)=>state.post?.postInfo)
-    const currentPost = postInfo[id]
+  const currentPost = postInfo[id]
   const commentsRef = doc(fireStore, "post", currentPost.id);
   const [replyBox, setReplyBox] = useState(false)
+  const [editMode, setEditMode] = useState(false)
+  const initialComments = []
   const getComments = async()=>{
     const valRef = await collection(fireStore, 'post');
     const data = await getDocs(query(valRef));
     const allData = data.docs.map(val=>({...val.data(), id:val.id}));
-   const commentsArr =  allData.map(val=>val.comments);
-   setComments(commentsArr[id],...comments)
-  }
+    const commentsArr =  allData.map(val=>val.comments);
+      setComments(commentsArr[id],...comments)
+   }
+
   useEffect(()=>{
     getComments();
   },[])
@@ -35,8 +39,8 @@ const CommentList = () => {
     }
   }
 
-  const onUpdateComment = () =>{
-
+  const onUpdateComment = (index) =>{
+    setEditMode(true)
   }
 
   const toggleReply = ()=>{
@@ -52,6 +56,12 @@ const CommentList = () => {
         <div>
           {comments && comments.map((value,index)=>(
           <CommentsList key={index}>
+            {editMode?
+            <>
+            <textarea defaultValue={value.comment}/>
+            </>
+            : 
+            <>
             <CommentTop>
               <CommentLeft>
                <CommentWriter>{value.writer}</CommentWriter>
@@ -59,8 +69,16 @@ const CommentList = () => {
               </CommentLeft>
               {value.id===user.id?   
               <CommentRight>
-                <DeleteButton onClick={()=>onDeleteComment(index)}>삭제</DeleteButton>
-                <UpdateButton>수정</UpdateButton>
+                {editMode?
+                <>
+                <CancleButton>취소</CancleButton>
+                <AddButton>등록</AddButton>
+                </> :
+                <>
+                 <DeleteButton onClick={()=>onDeleteComment(index)}>삭제</DeleteButton>
+                 <UpdateButton onClick={()=>onUpdateComment(index)}>수정</UpdateButton>
+                 </>
+                }
               </CommentRight>
               :null}
             </CommentTop>
@@ -68,12 +86,14 @@ const CommentList = () => {
             {value.comment}
             </CommentContent>
             <ReplyContent>
-             <ReplyCount>답글{" "}<span>10</span>개{" "}<span>▾</span></ReplyCount>
+             <ReplyCount>답글{" "}<span>10</span>개{" "}<img src={downArrowImg} alt='down arrow'/></ReplyCount>
              <p>|</p>
              <ReplyBox onClick={toggleReply}>답글쓰기</ReplyBox>
             </ReplyContent>
+            </>}
           </CommentsList>
           ))}
+
         </div>
     </CommentsListWrapper>
   )
@@ -128,7 +148,12 @@ const CommentRight = styled.div`
     cursor:pointer;
   }
 `
-
+const CancleButton = styled.button`
+color:gray;
+`
+const AddButton = styled.button`
+margin-left:5px;
+`
 const DeleteButton = styled.button`
 color:red;
 `
@@ -139,9 +164,9 @@ margin-left:5px;
 
 const CommentContent = styled.div`
 word-break: break-all;
-    word-wrap: break-word;
-    color: #434343;
-    line-height: 1.5;
+word-wrap: break-word;
+color: #434343;
+line-height: 1.5;
 font-size:13px;
 padding: 10px 0 15px 5px;
 
@@ -159,6 +184,10 @@ display:flex;
 const ReplyCount = styled.p`
  padding:none;
  cursor:pointer;
+  img {
+    width:10px;
+    height:10px;
+  }
 `
 
 const ReplyBox = styled.p`

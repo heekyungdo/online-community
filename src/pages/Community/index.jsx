@@ -19,72 +19,11 @@ import iconImage from '../../assets/images/icon_image.png'
 import iconText from '../../assets/images/icon_text.png'
 import Pagination from "./Section/Pagination";
 
-const MainTable = styled.div`
-  margin: 50px 0 0;
-`
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-
-thead {
-  th{
-    padding:10px 0;
-  border-bottom: 1px solid #404040;
-}
-}
-  tbody{
-    text-align:center;
-    tr{
-      &:hover {
-        background:#f5f5f5;
-        cursor:pointer;
-          }
-
-    td{
-      padding:7px 0;
-      border-bottom:1px solid #c1c1c1;
-  }
-`
-
-const WriterTd = styled.td`
-color: #374273;
-`
-
-const TitleTd = styled.td`
-display:flex;
-align-items:center;
-justify-content:center;
- img{
-  margin-right:3px;
- }
-`
-
-const Bottom = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  margin-top: 40px;
-
-  label {
-    margin-right: 7px;
-  }
-`
-
-const BtnWrapper = styled.div`
-  margin-left: 20px;
-
-  button {
-    padding: 5px 10px;
-    font-weight: bold;
-  }
-`
-
 const Community = ({ isAuth }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const fireStore = getFirestore(app);
-  const perPage= 5;
+  const [perPage, setPerPage] = useState(5)
   const [currentPage, setCurrentPage]=useState(1)
   const [posts, setPosts] = useState([]);
   const indexOfFirst = (currentPage-1)*perPage
@@ -95,8 +34,7 @@ const Community = ({ isAuth }) => {
     const valRef = await collection(fireStore, "post");
     const data = await getDocs(query(valRef, orderBy("date")));
     const allData = data.docs.map((val,index) => ({ ...val.data(), id: val.id ,index:index}));
-    // setPosts([allData, ...posts])
-    setPosts(...posts,allData)
+    setPosts(...posts,allData);
     dispatch(postData(allData));
   };
 
@@ -111,22 +49,19 @@ const Community = ({ isAuth }) => {
     { key: 4, value: "20개" },
   ];
 
-  const [selected, setSelected] = useState(2);
 
   const handleSelect = (e) => {
-    setSelected(e.target.value);
-    const newData = [...posts];
-    switch (selected) {
+    switch (Number(e.target.value)) {
       case 1:
-        return posts.slice(5);
+        return setPerPage(5);
       case 2:
-        return posts.slice(10);
+        return setPerPage(10);
       case 3:
-        return posts.slice(15);
+        return setPerPage(15);
       case 4:
-        return posts.slice(20);
+        return setPerPage(20);
       default:
-        return posts;
+        return setPerPage(5);
     }
   };
 
@@ -217,3 +152,64 @@ Community.propTypes = {
 };
 
 export default Community;
+
+const MainTable = styled.div`
+  margin: 50px 0 0;
+`
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+
+thead {
+  th{
+    padding:10px 0;
+  border-bottom: 1px solid #404040;
+}
+}
+  tbody{
+    text-align:center;
+    tr{
+      &:hover {
+        background:#f5f5f5;
+        cursor:pointer;
+          }
+
+    td{
+      padding:7px 0;
+      border-bottom:1px solid #c1c1c1;
+  }
+`
+
+const WriterTd = styled.td`
+color: #374273;
+`
+
+const TitleTd = styled.td`
+display:flex;
+align-items:center;
+justify-content:center;
+ img{
+  margin-right:3px;
+ }
+`
+
+const Bottom = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-top: 40px;
+
+  label {
+    margin-right: 7px;
+  }
+`
+
+const BtnWrapper = styled.div`
+  margin-left: 20px;
+
+  button {
+    padding: 5px 10px;
+    font-weight: bold;
+  }
+`

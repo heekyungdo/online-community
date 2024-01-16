@@ -11,58 +11,6 @@ import {
 import app from "../utils/firebase";
 import closeBtn from "../assets/images/btn_close.gif";
 
-const Wrapper = styled.div`
-  padding-bottom: 20px;
-`;
-
-const ImageList = styled.div`
-  display: flex;
-  background: #f8f8f8;
-  width: 100%;
-  height: 120px;
-  margin: 15px 0;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  padding: 10px;
-`;
-
-const ImageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-right: 20px;
-
-  &:last-child {
-    margin-right: unset;
-  }
-`;
-
-const UploadedImage = styled.img`
-  width: 120px;
-  height: 80px;
-  margin-bottom: 10px;
-`;
-
-const CloseImage = styled.img`
-  width: 15px;
-  cursor: pointer;
-`;
-
-const UploadBtn = styled.div`
-  span {
-    border: 1px solid #ccc;
-    text-align: center;
-    color: #031c45;
-    font-weight: bold;
-    background: #f0f0f0;
-    cursor: pointer;
-    padding: 5px 12px;
-  }
-`;
-
-const ImageInput = styled.input`
-  display: none;
-`;
-
 const ImageUpload = ({ images, onImageChange }) => {
   const storage = getStorage(app);
 
@@ -133,3 +81,55 @@ ImageUpload.propTypes = {
 };
 
 export default ImageUpload;
+
+const Wrapper = styled.div`
+  padding-bottom: 20px;
+`;
+
+const ImageList = styled.div`
+  display: flex;
+  background: #f8f8f8;
+  width: 100%;
+  height: 120px;
+  margin: 15px 0;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding: 10px;
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+
+  &:last-child {
+    margin-right: unset;
+  }
+`;
+
+const UploadedImage = styled.img`
+  width: 120px;
+  height: 80px;
+  margin-bottom: 10px;
+`;
+
+const CloseImage = styled.img`
+  width: 15px;
+  cursor: pointer;
+`;
+
+const UploadBtn = styled.div`
+  span {
+    border: 1px solid #ccc;
+    text-align: center;
+    color: #031c45;
+    font-weight: bold;
+    background: #f0f0f0;
+    cursor: pointer;
+    padding: 5px 12px;
+  }
+`;
+
+const ImageInput = styled.input`
+  display: none;
+`;
