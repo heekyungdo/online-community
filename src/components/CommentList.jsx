@@ -1,4 +1,4 @@
-import { arrayRemove, collection, doc, getDocs, getFirestore, query, updateDoc } from 'firebase/firestore'
+import { arrayRemove, collection, doc, getDocs, getFirestore, orderBy, query, updateDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import app from '../utils/firebase'
@@ -21,9 +21,10 @@ const CommentList = () => {
   const initialComments = []
   const getComments = async()=>{
     const valRef = await collection(fireStore, 'post');
-    const data = await getDocs(query(valRef));
+    const data = await getDocs(query(valRef,orderBy('date')));
     const allData = data.docs.map(val=>({...val.data(), id:val.id}));
     const commentsArr =  allData.map(val=>val.comments);
+    console.log(commentsArr)
       setComments(commentsArr[id],...comments)
    }
 
