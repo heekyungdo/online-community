@@ -34,7 +34,7 @@ const Community = ({ isAuth }) => {
     const valRef = await collection(fireStore, "post");
     const data = await getDocs(query(valRef, orderBy("date")));
     const allData = data.docs.map((val,index) => ({ ...val.data(), id: val.id ,index:index}));
-    setPosts(...posts,allData);
+    setPosts([...posts,...allData]);
     dispatch(postData(allData));
   };
 
@@ -89,7 +89,7 @@ const Community = ({ isAuth }) => {
       return iconImage
     }
   }
-
+  
   const renderData = (
    posts?.length>0 && posts?.slice(indexOfFirst,indexOfLast).map((post)=>(
       <tr key={post.id} onClick={()=>goToDetail(post.index)}>

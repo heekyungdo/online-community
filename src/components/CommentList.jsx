@@ -7,42 +7,11 @@ import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import downArrowImg from '../assets/images/down-arrow.svg'
 import upArrowImg from '../assets/images/up-arrow.svg'
+import PropTypes from 'prop-types'
 
-const CommentList = () => {
-  const fireStore = getFirestore(app);
-  const {id} = useParams();
-  const [comments, setComments] = useState([])
-  const user = useSelector((state)=>state.user?.userData)
-  const postInfo = useSelector((state)=>state.post?.postInfo)
-  const currentPost = postInfo[id]
-  const commentsRef = doc(fireStore, "post", currentPost.id);
+const CommentList = ({comments,onDeleteComment,onEditComment}) => {
   const [replyBox, setReplyBox] = useState(false)
-  const [editMode, setEditMode] = useState(false)
-  const initialComments = []
-  const getComments = async()=>{
-    const valRef = await collection(fireStore, 'post');
-    const data = await getDocs(query(valRef,orderBy('date')));
-    const allData = data.docs.map(val=>({...val.data(), id:val.id}));
-    const commentsArr =  allData.map(val=>val.comments);
-    console.log(commentsArr)
-      setComments(commentsArr[id],...comments)
-   }
-
-  useEffect(()=>{
-    getComments();
-  },[])
-
-  const onDeleteComment = async (index)=>{
-    if(window.confirm("삭제하시겠습니까?")) {
-      await updateDoc(commentsRef,{
-        comments:arrayRemove(comments[index])
-      }).then(()=>console.log('삭제'))
-    }
-  }
-
-  const onUpdateComment = (index) =>{
-    setEditMode(true)
-  }
+  const [editMode, setEditMode] = useState([])
 
   const toggleReply = ()=>{
 !setReplyBox != setReplyBox
@@ -77,7 +46,7 @@ const CommentList = () => {
                 </> :
                 <>
                  <DeleteButton onClick={()=>onDeleteComment(index)}>삭제</DeleteButton>
-                 <UpdateButton onClick={()=>onUpdateComment(index)}>수정</UpdateButton>
+                 <UpdateButton onClick={()=>onEditComment(index)}>수정</UpdateButton>
                  </>
                 }
               </CommentRight>
@@ -98,6 +67,13 @@ const CommentList = () => {
         </div>
     </CommentsListWrapper>
   )
+}
+
+
+CommentList.propTypes={
+  comments:PropTypes.array,
+  onDeleteComment:PropTypes.func,
+  onEditComment:PropTypes.func,
 }
 
 export default CommentList;

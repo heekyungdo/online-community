@@ -4,76 +4,6 @@ import { loginUser } from "../../store/thunkFunctions";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
-const LoginWrapper = styled.div`
-  text-align: center;
-  border: 1px solid lightgray;
-  max-width: 500px;
-  margin: 0 auto;
-  box-shadow: 3px 2px 5px 3px lightgray;
-  border-radius: 5px;
-  padding: 25px 0;
-`
-
-const LoginForm = styled.form`
-  max-width: 400px;
-  width: 100%;
-  margin: 0 auto;
-`
-
-const LoginInputBox = styled.div`
-  margin: 30px 0;
-  width: 100%;
-`
-
-const LoginInput = styled.input`
-  border-radius: 4px;
-  background-color: #f8f8f8;
-  border: none;
-  padding: 15px 0 15px 15px;
-  width: 100%;
-  box-sizing: border-box;
-
-  &::placeholder {
-    color: #d2d2d2;
-  }
-`
-
-const ValidationError = styled.span`
-  color: #c63d2f;
-  font-size: 13px;
-  display: flex;
-  margin: 5px 0 0 10px;
-`
-
-const BtnWrapper = styled.div`
-  margin-top: 40px;
-
-  button {
-    background-color: #bca37f;
-    color: white;
-    cursor: pointer;
-    padding: 15px;
-    border: 1px solid #bca37f;
-    border-radius: 4px;
-    width: 100%;
-    font-size: 15px;
-
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-`
-
-const GoRegisterWrapper = styled.p`
-  margin-top: 15px;
-  font-size: 13px;
-
-  a {
-    color: black;
-    opacity: 0.5;
-  }
-`
-
 const Login = () => {
   const {
     register,
@@ -153,3 +83,73 @@ const Login = () => {
 };
 
 export default Login;
+
+const LoginWrapper = styled.div`
+  text-align: center;
+  border: 1px solid lightgray;
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 3px 2px 5px 3px lightgray;
+  border-radius: 5px;
+  padding: 25px 0;
+`
+
+const LoginForm = styled.form`
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+`
+
+const LoginInputBox = styled.div`
+  margin: 30px 0;
+  width: 100%;
+`
+
+const LoginInput = styled.input`
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  border: none;
+  padding: 15px 0 15px 15px;
+  width: 100%;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #d2d2d2;
+  }
+`
+
+const ValidationError = styled.span`
+  color: #c63d2f;
+  font-size: 13px;
+  display: flex;
+  margin: 5px 0 0 10px;
+`
+
+const BtnWrapper = styled.div`
+  margin-top: 40px;
+
+  button {
+    background-color: #bca37f;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border: 1px solid #bca37f;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 15px;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+`
+
+const GoRegisterWrapper = styled.p`
+  margin-top: 15px;
+  font-size: 13px;
+
+  a {
+    color: black;
+    opacity: 0.5;
+  }
+`

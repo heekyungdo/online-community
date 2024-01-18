@@ -6,22 +6,38 @@ import dayjs from 'dayjs'
 import CommentInput from "../../components/CommentInput";
 import CommentList from "../../components/CommentList";
 import { useSelector } from "react-redux";
-import { doc, updateDoc, deleteField, getFirestore, deleteDoc } from "firebase/firestore";
+import { doc, updateDoc, getFirestore, deleteDoc, arrayUnion, collection, getDocs, query, orderBy, arrayRemove } from "firebase/firestore";
 import app from "../../utils/firebase";
 import Swal from 'sweetalert2'
 
 const Detail = () => {
   const fireStore = getFirestore(app);
   const {id} = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [post, setPost] = useState({});
   const postInfo = useSelector((state)=>state.post?.postInfo);
-  const user = useSelector((state)=>state.user?.userData)
+  const user = useSelector((state)=>state.user?.userData);
+  const currentPost = postInfo[id];
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([])
 
-  useEffect(() => {
-    const data = postInfo[id]
-    setPost(data)
-  }, [postInfo]);
+  const getPosts = async()=>{
+    const valRef = await collection(fireStore, 'post');
+    const data = await getDocs(query(valRef,orderBy('date')));
+    const allData = data.docs.map(val=>({...val.data(), id:val.id}));
+     setPost(currentPost)
+    const commentsArr =  allData.map(val=>val.comments);
+      setComments(commentsArr[id],...comments)
+   }
+
+  useEffect(()=>{
+    getPosts();
+  },[])
+
+  // console.log(postInfo)
+  // useEffect(() => {
+  //   setPost(currentPost)
+  // }, [postInfo]);
 
   const handleDelete = async (postId)=>{
 Swal.fire({
@@ -38,13 +54,51 @@ Swal.fire({
      deleteDoc(doc(fireStore, "post", postId)).then(()=>{
       navigate('/community')
      })
-  }
-});
-  }
+  }})
+  };
 
   const handleUpdate = ()=>{
   navigate('/update/'+id)
+  };
+
+  const handleCommentSubmit = async (e) =>{
+    e.preventDefault();
+
+    const commentInfo = {
+      writer:user.name,
+      id:user.id,
+      createdAt:new Date().toISOString(),
+      comment:comment
+    };
+
+    const commentsRef = doc(fireStore, "post", currentPost.id);
+
+    if(!comment) return;
+
+    await updateDoc(commentsRef, {
+      comments: arrayUnion(commentInfo)
+  }).then(()=>setComment(''));
+  };
+
+  const handleComment = (e)=>{
+    setComment(e.target.value);
+ };
+
+
+ const onDeleteComment = async (index)=>{
+  if(window.confirm("삭제하시겠습니까?")) {
+    await updateDoc(commentsRef,{
+      comments:arrayRemove(comments[index])
+    }).then(()=>console.log('삭제'))
   }
+}
+
+const onEditComment = (index) =>{
+  // const edit = {
+  //   status:false,
+  //   comment:
+  // }
+}
 
   return (
     <div>
@@ -78,8 +132,14 @@ Swal.fire({
           </ButtonGroup>
           ):null}
       <CommentTitle>댓글쓰기</CommentTitle>
-      <CommentInput/>
-      <CommentList/>
+      <CommentInput 
+      handleCommentSubmit={handleCommentSubmit} 
+      handleComment={handleComment}
+      comment={comment}/>
+      <CommentList
+      comments={comments}
+      onDeleteComment={onDeleteComment}
+      onEditComment={onEditComment}/>
     </div>
   );
 };
