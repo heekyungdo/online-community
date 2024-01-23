@@ -20,24 +20,20 @@ const Detail = () => {
   const currentPost = postInfo[id];
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([])
+  const [commentEditMode, setCommentEditMode]=useState([])
 
   const getPosts = async()=>{
     const valRef = await collection(fireStore, 'post');
     const data = await getDocs(query(valRef,orderBy('date')));
     const allData = data.docs.map(val=>({...val.data(), id:val.id}));
-     setPost(currentPost)
+      setPost(currentPost)
     const commentsArr =  allData.map(val=>val.comments);
-      setComments(commentsArr[id],...comments)
+      setComments([...commentsArr[id],...comments])
    }
 
   useEffect(()=>{
     getPosts();
   },[])
-
-  // console.log(postInfo)
-  // useEffect(() => {
-  //   setPost(currentPost)
-  // }, [postInfo]);
 
   const handleDelete = async (postId)=>{
 Swal.fire({
@@ -57,6 +53,8 @@ Swal.fire({
   }})
   };
 
+  const commentsRef = doc(fireStore, "post", currentPost.id);
+
   const handleUpdate = ()=>{
   navigate('/update/'+id)
   };
@@ -71,7 +69,6 @@ Swal.fire({
       comment:comment
     };
 
-    const commentsRef = doc(fireStore, "post", currentPost.id);
 
     if(!comment) return;
 
@@ -91,14 +88,26 @@ Swal.fire({
       comments:arrayRemove(comments[index])
     }).then(()=>console.log('삭제'))
   }
-}
+};
 
 const onEditComment = (index) =>{
   // const edit = {
+  //   id:index,
   //   status:false,
-  //   comment:
-  // }
-}
+  // };
+  // console.log(index)
+  
+  // const myNextList = [...myList];
+  //   const artwork = myNextList.find(
+  //     a => a.id === artworkId
+  //   );
+  //   artwork.seen = nextSeen;
+  //   setMyList(myNextList);
+
+  const status = commentEditMode.filter((_,i)=>console.log(i))
+  console.log(status,index)
+
+};
 
   return (
     <div>
@@ -137,9 +146,11 @@ const onEditComment = (index) =>{
       handleComment={handleComment}
       comment={comment}/>
       <CommentList
+      userId={user.id}
       comments={comments}
       onDeleteComment={onDeleteComment}
-      onEditComment={onEditComment}/>
+      onEditComment={onEditComment}
+      editMode={commentEditMode}/>
     </div>
   );
 };

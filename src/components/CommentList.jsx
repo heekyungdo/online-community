@@ -1,17 +1,18 @@
-import { arrayRemove, collection, doc, getDocs, getFirestore, orderBy, query, updateDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import app from '../utils/firebase'
 import dayjs from 'dayjs'
-import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
 import downArrowImg from '../assets/images/down-arrow.svg'
 import upArrowImg from '../assets/images/up-arrow.svg'
 import PropTypes from 'prop-types'
 
-const CommentList = ({comments,onDeleteComment,onEditComment}) => {
+const CommentList = ({userId, comments,onDeleteComment,onEditComment,editMode}) => {
   const [replyBox, setReplyBox] = useState(false)
-  const [editMode, setEditMode] = useState([])
+  const [test,setTest]=useState(false)
+const [selectedCommentIndex, setSelectedCommentIndex] = useState()
+
+const onSelectCommentIndex = (index) => {
+  setSelectedCommentIndex(index);
+};
 
   const toggleReply = ()=>{
 !setReplyBox != setReplyBox
@@ -26,8 +27,8 @@ const CommentList = ({comments,onDeleteComment,onEditComment}) => {
         <div>
           {comments && comments.map((value,index)=>(
           <CommentsList key={index}>
-            {editMode?
-            <>
+            {selectedCommentIndex === index ?
+             <>
             <textarea defaultValue={value.comment}/>
             </>
             : 
@@ -37,16 +38,17 @@ const CommentList = ({comments,onDeleteComment,onEditComment}) => {
                <CommentWriter>{value.writer}</CommentWriter>
                <CommentDate>{dayjs(value.createdAt).format('YYYY.MM.DD HH:mm')}</CommentDate>
               </CommentLeft>
-              {value.id===user.id?   
+              {value.id===userId?   
               <CommentRight>
-                {editMode?
+                {selectedCommentIndex === index ?
                 <>
                 <CancleButton>취소</CancleButton>
                 <AddButton>등록</AddButton>
-                </> :
+                </> 
+                :
                 <>
                  <DeleteButton onClick={()=>onDeleteComment(index)}>삭제</DeleteButton>
-                 <UpdateButton onClick={()=>onEditComment(index)}>수정</UpdateButton>
+                 <UpdateButton onClick={()=>onSelectCommentIndex(index)}>수정</UpdateButton>
                  </>
                 }
               </CommentRight>
@@ -71,9 +73,11 @@ const CommentList = ({comments,onDeleteComment,onEditComment}) => {
 
 
 CommentList.propTypes={
+  userId:PropTypes.string,
   comments:PropTypes.array,
   onDeleteComment:PropTypes.func,
   onEditComment:PropTypes.func,
+  editMode:PropTypes.array
 }
 
 export default CommentList;
