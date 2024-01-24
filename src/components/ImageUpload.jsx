@@ -80,11 +80,11 @@ ImageUpload.propTypes = {
   imageUrl: PropTypes.func,
 };
 
-export default ImageUpload;
+export default ImageUpload
 
 const Wrapper = styled.div`
   padding-bottom: 20px;
-`;
+`
 
 const ImageList = styled.div`
   display: flex;
@@ -95,7 +95,7 @@ const ImageList = styled.div`
   overflow-x: scroll;
   overflow-y: hidden;
   padding: 10px;
-`;
+`
 
 const ImageWrapper = styled.div`
   display: flex;
@@ -105,18 +105,18 @@ const ImageWrapper = styled.div`
   &:last-child {
     margin-right: unset;
   }
-`;
+`
 
 const UploadedImage = styled.img`
   width: 120px;
   height: 80px;
   margin-bottom: 10px;
-`;
+`
 
 const CloseImage = styled.img`
   width: 15px;
   cursor: pointer;
-`;
+`
 
 const UploadBtn = styled.div`
   span {
@@ -128,8 +128,8 @@ const UploadBtn = styled.div`
     cursor: pointer;
     padding: 5px 12px;
   }
-`;
+`
 
 const ImageInput = styled.input`
   display: none;
-`;
+`

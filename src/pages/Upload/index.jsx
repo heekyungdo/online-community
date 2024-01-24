@@ -77,7 +77,7 @@ const valRef = collection(fireStore, "post");
   );
 };
 
-export default Upload;
+export default Upload
 
 const TitleWrapper = styled.div`
   margin: 30px 0 10px;

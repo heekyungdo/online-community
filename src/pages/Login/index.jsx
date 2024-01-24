@@ -82,7 +82,7 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login
 
 const LoginWrapper = styled.div`
   text-align: center;

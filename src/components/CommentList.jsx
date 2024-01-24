@@ -5,18 +5,23 @@ import downArrowImg from '../assets/images/down-arrow.svg'
 import upArrowImg from '../assets/images/up-arrow.svg'
 import PropTypes from 'prop-types'
 
-const CommentList = ({userId, comments,onDeleteComment,onEditComment,editMode}) => {
-  const [replyBox, setReplyBox] = useState(false)
-  const [test,setTest]=useState(false)
+const CommentList = ({userId, comments, onDeleteComment,onEditComment,editMode}) => {
 const [selectedCommentIndex, setSelectedCommentIndex] = useState()
 
 const onSelectCommentIndex = (index) => {
   setSelectedCommentIndex(index);
 };
 
-  const toggleReply = ()=>{
-!setReplyBox != setReplyBox
-  }
+const editComment = (
+  <CommentEditor>
+  <TextArea defaultValue={comments[selectedCommentIndex]?.comment}/>
+  <CommentRight>
+  <CancleButton onClick={()=>onSelectCommentIndex()}>취소</CancleButton>
+  <AddButton>등록</AddButton>
+  </CommentRight>
+  </CommentEditor>
+
+)
 
   if(!comments) return;
 
@@ -29,7 +34,7 @@ const onSelectCommentIndex = (index) => {
           <CommentsList key={index}>
             {selectedCommentIndex === index ?
              <>
-            <textarea defaultValue={value.comment}/>
+             {editComment}
             </>
             : 
             <>
@@ -40,17 +45,8 @@ const onSelectCommentIndex = (index) => {
               </CommentLeft>
               {value.id===userId?   
               <CommentRight>
-                {selectedCommentIndex === index ?
-                <>
-                <CancleButton>취소</CancleButton>
-                <AddButton>등록</AddButton>
-                </> 
-                :
-                <>
                  <DeleteButton onClick={()=>onDeleteComment(index)}>삭제</DeleteButton>
                  <UpdateButton onClick={()=>onSelectCommentIndex(index)}>수정</UpdateButton>
-                 </>
-                }
               </CommentRight>
               :null}
             </CommentTop>
@@ -60,7 +56,7 @@ const onSelectCommentIndex = (index) => {
             <ReplyContent>
              <ReplyCount>답글{" "}<span>10</span>개{" "}<img src={downArrowImg} alt='down arrow'/></ReplyCount>
              <p>|</p>
-             <ReplyBox onClick={toggleReply}>답글쓰기</ReplyBox>
+             <ReplyBox>답글쓰기</ReplyBox>
             </ReplyContent>
             </>}
           </CommentsList>
@@ -80,7 +76,7 @@ CommentList.propTypes={
   editMode:PropTypes.array
 }
 
-export default CommentList;
+export default CommentList
 
 const CommentsListWrapper = styled.div`
 margin:40px 0;
@@ -120,6 +116,29 @@ margin-left: 14px;
 color: #aaa;
 font-size: 11px;
 `
+const CommentEditor= styled.div`
+display:grid;
+grid-template-columns:1fr auto;
+align-items:center;
+width:100%;
+`
+
+const TextArea = styled.textarea`
+background: #fff;
+border: 1px solid #acb2b4;
+color: #565656;
+font-size: 15px;
+resize: none;
+height: 10vh;
+box-sizing: border-box;
+word-wrap: break-word;
+word-break: break-word;
+margin-right:15px;
+padding:5px;
+&::placeholder{
+    font-size:15px;
+}
+`
 
 const CommentRight = styled.div`
   button {
@@ -135,6 +154,7 @@ color:gray;
 const AddButton = styled.button`
 margin-left:5px;
 `
+
 const DeleteButton = styled.button`
 color:red;
 `

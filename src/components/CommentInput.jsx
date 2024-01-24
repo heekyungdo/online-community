@@ -27,7 +27,7 @@ CommentInput.propTypes={
   comment:PropTypes.string
 };
 
-export default CommentInput;
+export default CommentInput
 
 const CommentEditor= styled.div`
 display:grid;
