@@ -43,7 +43,7 @@ const Update = () => {
       await updateDoc(updateRef, postInfo).then(()=>{
         toast.success("수정되었습니다.");
         navigate('/community')
-      })
+      });
     };
   console.log(writtenPost)
     const handleChange = (e) => {

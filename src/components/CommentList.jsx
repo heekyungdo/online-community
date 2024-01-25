@@ -5,22 +5,22 @@ import downArrowImg from '../assets/images/down-arrow.svg'
 import upArrowImg from '../assets/images/up-arrow.svg'
 import PropTypes from 'prop-types'
 
-const CommentList = ({userId, comments, onDeleteComment,onEditComment,editMode}) => {
-const [selectedCommentIndex, setSelectedCommentIndex] = useState()
-
-const onSelectCommentIndex = (index) => {
-  setSelectedCommentIndex(index);
-};
+const CommentList = ({userId, comments, onDeleteComment,onSelectCommentIndex,selectedCommentIndex,handleComment,onEditComment,editMode}) => {
 
 const editComment = (
+  // <form onSubmit={onEditComment}>
+    // <label htmlFor="editComment"></label>
   <CommentEditor>
-  <TextArea defaultValue={comments[selectedCommentIndex]?.comment}/>
+  <TextArea 
+  id="editComment"
+  defaultValue={comments[selectedCommentIndex]?.comment}
+  onChange={handleComment}/>
   <CommentRight>
   <CancleButton onClick={()=>onSelectCommentIndex()}>취소</CancleButton>
-  <AddButton>등록</AddButton>
+  <AddButton onClick={()=>onEditComment(selectedCommentIndex)}>등록</AddButton>
   </CommentRight>
   </CommentEditor>
-
+  // </form>
 )
 
   if(!comments) return;
@@ -28,9 +28,11 @@ const editComment = (
   return (
 
     <CommentsListWrapper>
-        <CommentsTitle><CommentCount>{comments && comments.length}{" "}</CommentCount>개의 댓글</CommentsTitle>
-        <div>
-          {comments && comments.map((value,index)=>(
+      {comments?.length>0 ?
+        <CommentsTitle><CommentCount>{comments?.length}{" "}</CommentCount>개의 댓글</CommentsTitle>
+      : null}
+      <div>
+          {comments?.map((value,index)=>(
           <CommentsList key={index}>
             {selectedCommentIndex === index ?
              <>
@@ -72,6 +74,9 @@ CommentList.propTypes={
   userId:PropTypes.string,
   comments:PropTypes.array,
   onDeleteComment:PropTypes.func,
+  onSelectCommentIndex:PropTypes.func,
+  selectedCommentIndex:PropTypes.number,
+  handleComment:PropTypes.func,
   onEditComment:PropTypes.func,
   editMode:PropTypes.array
 }

@@ -21,6 +21,7 @@ const Detail = () => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([])
   const [commentEditMode, setCommentEditMode]=useState([])
+  const [selectedCommentIndex, setSelectedCommentIndex] = useState()
 
   const getPosts = async()=>{
     const valRef = await collection(fireStore, 'post');
@@ -90,23 +91,31 @@ Swal.fire({
   }
 };
 
-const onEditComment = (index) =>{
-  // const edit = {
-  //   id:index,
-  //   status:false,
-  // };
-  // console.log(index)
-  
-  // const myNextList = [...myList];
-  //   const artwork = myNextList.find(
-  //     a => a.id === artworkId
-  //   );
-  //   artwork.seen = nextSeen;
-  //   setMyList(myNextList);
+const onSelectCommentIndex = (index) => {
+  setSelectedCommentIndex(index);
+};
 
-  const status = commentEditMode.filter((_,i)=>console.log(i))
-  console.log(status,index)
+const onEditComment = async (index) =>{
+  await updateDoc(commentsRef,{
+    comments:arrayRemove(comments[index])
+  });
 
+  const editedComment ={
+    writer:user.name,
+    id:user.id,
+    createdAt:new Date().toISOString(),
+    comment:comment
+  };
+      
+console.log(1)
+  // await updateDoc(commentsRef, editedComment)
+  await updateDoc(commentsRef, {
+    comments: arrayUnion(editedComment)
+});
+// await commentsRef.set({
+//   comments: arrayUnion(editedComment),
+// },{ merge: true })
+console.log(2)
 };
 
   return (
@@ -150,7 +159,11 @@ const onEditComment = (index) =>{
       comments={comments}
       onDeleteComment={onDeleteComment}
       onEditComment={onEditComment}
-      editMode={commentEditMode}/>
+      editMode={commentEditMode}
+      handleCommentSubmit={handleCommentSubmit} 
+      handleComment={handleComment}
+      onSelectCommentIndex={onSelectCommentIndex}
+      selectedCommentIndex={Number(selectedCommentIndex)}/>
     </div>
   );
 };
