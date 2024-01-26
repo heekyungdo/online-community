@@ -97,9 +97,6 @@ const onSelectCommentIndex = (index) => {
 };
 
 const onEditComment = async (index) =>{
-  await updateDoc(commentsRef,{
-    comments:arrayRemove(comments[index])
-  });
 
   const editedComment ={
     writer:user.name,
@@ -108,15 +105,15 @@ const onEditComment = async (index) =>{
     comment:comment
   };
       
-console.log(1)
-  // await updateDoc(commentsRef, editedComment)
+const newComments = [...comments];
+newComments.splice(index, 0, editedComment);
   await updateDoc(commentsRef, {
-    comments: arrayUnion(editedComment)
+    comments: newComments
 });
-// await commentsRef.set({
-//   comments: arrayUnion(editedComment),
-// },{ merge: true })
-console.log(2)
+
+await updateDoc(commentsRef,{
+  comments:arrayRemove(comments[index])
+});
 };
 
   return (
