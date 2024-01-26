@@ -29,6 +29,7 @@ const Detail = () => {
     const allData = data.docs.map(val=>({...val.data(), id:val.id}));
       setPost(currentPost)
     const commentsArr =  allData.map(val=>val.comments);
+    if(!commentsArr[id]) return;
       setComments([...commentsArr[id],...comments])
    }
 

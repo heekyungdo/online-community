@@ -4,15 +4,13 @@ import dayjs from 'dayjs'
 import downArrowImg from '../assets/images/down-arrow.svg'
 import upArrowImg from '../assets/images/up-arrow.svg'
 import PropTypes from 'prop-types'
+import CommentInput from './CommentInput'
 
 const CommentList = ({userId, comments, onDeleteComment,onSelectCommentIndex,selectedCommentIndex,handleComment,onEditComment,editMode}) => {
 
 const editComment = (
-  // <form onSubmit={onEditComment}>
-    // <label htmlFor="editComment"></label>
   <CommentEditor>
   <TextArea 
-  id="editComment"
   defaultValue={comments[selectedCommentIndex]?.comment}
   onChange={handleComment}/>
   <CommentRight>
@@ -20,8 +18,8 @@ const editComment = (
   <AddButton onClick={()=>onEditComment(selectedCommentIndex)}>등록</AddButton>
   </CommentRight>
   </CommentEditor>
-  // </form>
 )
+
 
   if(!comments) return;
 
@@ -58,12 +56,11 @@ const editComment = (
             <ReplyContent>
              <ReplyCount>답글{" "}<span>10</span>개{" "}<img src={downArrowImg} alt='down arrow'/></ReplyCount>
              <p>|</p>
-             <ReplyBox>답글쓰기</ReplyBox>
+             <ReplyBox onClick={()=>onSelectCommentIndex(index)}>답글쓰기</ReplyBox>
             </ReplyContent>
             </>}
           </CommentsList>
           ))}
-
         </div>
     </CommentsListWrapper>
   )
