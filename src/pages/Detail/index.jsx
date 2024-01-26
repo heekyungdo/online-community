@@ -76,7 +76,7 @@ Swal.fire({
 
     await updateDoc(commentsRef, {
       comments: arrayUnion(commentInfo)
-  }).then(()=>setComment(''));
+  }).then(()=>setComment('')).then(()=>window.location.reload());
   };
 
   const handleComment = (e)=>{
@@ -88,7 +88,7 @@ Swal.fire({
   if(window.confirm("삭제하시겠습니까?")) {
     await updateDoc(commentsRef,{
       comments:arrayRemove(comments[index])
-    }).then(()=>console.log('삭제'))
+    }).then(()=>window.location.reload());
   }
 };
 
@@ -105,6 +105,8 @@ const onEditComment = async (index) =>{
     comment:comment
   };
       
+  // firebase에는 배열을 수정하는 기능이 없어서
+  // 해당 index에 수정한 댓글 넣어주고, 기존건 삭제로 구현함
 const newComments = [...comments];
 newComments.splice(index, 0, editedComment);
   await updateDoc(commentsRef, {
@@ -113,7 +115,7 @@ newComments.splice(index, 0, editedComment);
 
 await updateDoc(commentsRef,{
   comments:arrayRemove(comments[index])
-});
+}).then(()=>window.location.reload());
 };
 
   return (

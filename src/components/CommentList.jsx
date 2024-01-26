@@ -4,10 +4,9 @@ import dayjs from 'dayjs'
 import downArrowImg from '../assets/images/down-arrow.svg'
 import upArrowImg from '../assets/images/up-arrow.svg'
 import PropTypes from 'prop-types'
-import CommentInput from './CommentInput'
 
 const CommentList = ({userId, comments, onDeleteComment,onSelectCommentIndex,selectedCommentIndex,handleComment,onEditComment,editMode}) => {
-
+  const [select, setSelect] = useState([]);
 const editComment = (
   <CommentEditor>
   <TextArea 
@@ -20,6 +19,20 @@ const editComment = (
   </CommentEditor>
 )
 
+const replyComment = (
+  <>
+  <form >
+    <label htmlFor="replyComment"></label>
+    <CommentEditor>
+    <TextArea 
+       id="replyComment" 
+       placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.' 
+       />
+        <Button type='submit'>등록</Button>
+    </CommentEditor>
+    </form>
+    </>
+)
 
   if(!comments) return;
 
@@ -56,8 +69,17 @@ const editComment = (
             <ReplyContent>
              <ReplyCount>답글{" "}<span>10</span>개{" "}<img src={downArrowImg} alt='down arrow'/></ReplyCount>
              <p>|</p>
-             <ReplyBox onClick={()=>onSelectCommentIndex(index)}>답글쓰기</ReplyBox>
+             <ReplyWrite  onClick={() => {
+          !select.includes(value.createdAt)
+            ? setSelect((select) => [...select, value.createdAt])
+            : setSelect(select.filter((button) => button !== value.createdAt));
+        }}>답글쓰기</ReplyWrite>
             </ReplyContent>
+            <ReplyBox>
+             {select.includes(value.createdAt)
+            ? replyComment
+            : null}
+            </ReplyBox>
             </>}
           </CommentsList>
           ))}
@@ -193,7 +215,15 @@ const ReplyCount = styled.p`
   }
 `
 
-const ReplyBox = styled.p`
+const ReplyWrite = styled.p`
 padding:none;
+cursor:pointer;
+`
+const ReplyBox = styled.p`
+margin-top:10px;
+`
+const Button = styled.button`
+padding:0 30px;
+height: 10vh;
 cursor:pointer;
 `
