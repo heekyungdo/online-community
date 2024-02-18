@@ -20,8 +20,9 @@ const Detail = () => {
   const currentPost = postInfo[id];
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([])
-  const [commentEditMode, setCommentEditMode]=useState([])
+  const [replyComment, setReplyComment] = useState('')
   const [selectedCommentIndex, setSelectedCommentIndex] = useState()
+  const [selectedReplyIndex, setSelectedReplyIndex] = useState()
 
   const getPosts = async()=>{
     const valRef = await collection(fireStore, 'post');
@@ -56,6 +57,7 @@ Swal.fire({
   };
 
   const commentsRef = doc(fireStore, "post", currentPost.id);
+  const newComments = [...comments];
 
   const handleUpdate = ()=>{
   navigate('/update/'+id)
@@ -68,15 +70,17 @@ Swal.fire({
       writer:user.name,
       id:user.id,
       createdAt:new Date().toISOString(),
-      comment:comment
+      comment:comment,
+      reply:[]
     };
-
 
     if(!comment) return;
 
     await updateDoc(commentsRef, {
       comments: arrayUnion(commentInfo)
-  }).then(()=>setComment('')).then(()=>window.location.reload());
+  })
+  .then(()=>setComment(''))
+  .then(()=>window.location.reload());
   };
 
   const handleComment = (e)=>{
@@ -102,12 +106,12 @@ const onEditComment = async (index) =>{
     writer:user.name,
     id:user.id,
     createdAt:new Date().toISOString(),
-    comment:comment
+    comment:comment,
+    reply:[]
   };
       
   // firebase에는 배열을 수정하는 기능이 없어서
   // 해당 index에 수정한 댓글 넣어주고, 기존건 삭제로 구현함
-const newComments = [...comments];
 newComments.splice(index, 0, editedComment);
   await updateDoc(commentsRef, {
     comments: newComments
@@ -116,6 +120,46 @@ newComments.splice(index, 0, editedComment);
 await updateDoc(commentsRef,{
   comments:arrayRemove(comments[index])
 }).then(()=>window.location.reload());
+};
+
+
+const handleReplyComment = (e) => {
+  setReplyComment(e.target.value)
+};
+
+const onReplyComment = async() => {
+  // e.preventDefault();
+
+  const newComment = newComments[selectedReplyIndex]
+  console.log(selectedReplyIndex)
+
+const commentInfo = newComment.reply.push(
+  { writer:user.name,
+    id:user.id,
+    createdAt:new Date().toISOString(),
+    comment:replyComment,
+  }
+)
+
+  newComments.splice(0, 0, commentInfo);
+    await updateDoc(commentsRef, {
+      comments: newComments
+  });
+  
+//   await updateDoc(commentsRef,{
+//     comments:arrayRemove(comments[0])
+//   }).then(()=>window.location.reload());
+
+
+// console.log('replyRef',replyRef)
+  // if(!comment) return;
+
+
+//   await updateDoc(commentsRef, {
+//     comments: arrayUnion(commentInfo)
+// });
+// .then(()=>setReplyComment(''))
+// .then(()=>window.location.reload());
 };
 
   return (
@@ -159,11 +203,13 @@ await updateDoc(commentsRef,{
       comments={comments}
       onDeleteComment={onDeleteComment}
       onEditComment={onEditComment}
-      editMode={commentEditMode}
       handleCommentSubmit={handleCommentSubmit} 
       handleComment={handleComment}
       onSelectCommentIndex={onSelectCommentIndex}
-      selectedCommentIndex={Number(selectedCommentIndex)}/>
+      selectedCommentIndex={Number(selectedCommentIndex)}
+      handleReplyComment={handleReplyComment}
+      onReplyComment={onReplyComment}
+      setSelectedReplyIndex={setSelectedReplyIndex}/>
     </div>
   );
 };

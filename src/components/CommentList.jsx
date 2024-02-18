@@ -5,8 +5,19 @@ import downArrowImg from '../assets/images/down-arrow.svg'
 import upArrowImg from '../assets/images/up-arrow.svg'
 import PropTypes from 'prop-types'
 
-const CommentList = ({userId, comments, onDeleteComment,onSelectCommentIndex,selectedCommentIndex,handleComment,onEditComment,editMode}) => {
+const CommentList = (
+  {userId,
+     comments, 
+     onDeleteComment,
+     onSelectCommentIndex,
+     selectedCommentIndex,
+     handleComment,
+     onEditComment,
+     handleReplyComment,
+     onReplyComment,
+     setSelectedReplyIndex}) => {
   const [select, setSelect] = useState([]);
+
 const editComment = (
   <CommentEditor>
   <TextArea 
@@ -21,18 +32,19 @@ const editComment = (
 
 const replyComment = (
   <>
-  <form >
-    <label htmlFor="replyComment"></label>
     <CommentEditor>
     <TextArea 
        id="replyComment" 
        placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.' 
+       onChange={handleReplyComment}
        />
-        <Button type='submit'>등록</Button>
+        <Button onClick={onReplyComment}>등록</Button>
     </CommentEditor>
-    </form>
     </>
+
 )
+
+// console.log(Number(selectedCommentIndex))
 
   if(!comments) return;
 
@@ -69,7 +81,7 @@ const replyComment = (
             <ReplyContent>
              <ReplyCount>답글{" "}<span>10</span>개{" "}<img src={downArrowImg} alt='down arrow'/></ReplyCount>
              <p>|</p>
-             <ReplyWrite  onClick={() => {
+             <ReplyWrite  onClick={() => {setSelectedReplyIndex(index),
           !select.includes(value.createdAt)
             ? setSelect((select) => [...select, value.createdAt])
             : setSelect(select.filter((button) => button !== value.createdAt));
@@ -97,7 +109,8 @@ CommentList.propTypes={
   selectedCommentIndex:PropTypes.number,
   handleComment:PropTypes.func,
   onEditComment:PropTypes.func,
-  editMode:PropTypes.array
+  handleReplyComment:PropTypes.func,
+  onReplyComment:PropTypes.func
 }
 
 export default CommentList
@@ -219,9 +232,11 @@ const ReplyWrite = styled.p`
 padding:none;
 cursor:pointer;
 `
-const ReplyBox = styled.p`
+
+const ReplyBox = styled.div`
 margin-top:10px;
 `
+
 const Button = styled.button`
 padding:0 30px;
 height: 10vh;
