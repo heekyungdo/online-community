@@ -6,111 +6,126 @@ import upArrowImg from '../assets/images/up-arrow.svg'
 import PropTypes from 'prop-types'
 
 const CommentList = (
-  {userId,
-     comments, 
-     onDeleteComment,
-     onSelectCommentIndex,
-     selectedCommentIndex,
-     handleComment,
-     onEditComment,
-     handleReplyComment,
-     onReplyComment,
-     setSelectedReplyIndex}) => {
+  { userId,
+    comments,
+    onDeleteComment,
+    onSelectCommentIndex,
+    selectedCommentIndex,
+    handleComment,
+    onEditComment,
+    handleReplyComment,
+    onReplyComment,
+    setSelectedReplyIndex }) => {
   const [select, setSelect] = useState([]);
+  const [replyComments, setReplyComments] = useState([])
 
-const editComment = (
-  <CommentEditor>
-  <TextArea 
-  defaultValue={comments[selectedCommentIndex]?.comment}
-  onChange={handleComment}/>
-  <CommentRight>
-  <CancleButton onClick={()=>onSelectCommentIndex()}>취소</CancleButton>
-  <AddButton onClick={()=>onEditComment(selectedCommentIndex)}>등록</AddButton>
-  </CommentRight>
-  </CommentEditor>
-)
-
-const replyComment = (
-  <>
+  const editComment = (
     <CommentEditor>
-    <TextArea 
-       id="replyComment" 
-       placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.' 
-       onChange={handleReplyComment}
-       />
-        <Button onClick={onReplyComment}>등록</Button>
+      <TextArea
+        defaultValue={comments[selectedCommentIndex]?.comment}
+        onChange={handleComment} />
+      <CommentRight>
+        <CancleButton onClick={() => onSelectCommentIndex()}>취소</CancleButton>
+        <AddButton onClick={() => onEditComment(selectedCommentIndex)}>등록</AddButton>
+      </CommentRight>
     </CommentEditor>
+  )
+
+  const replyCommentInput = (
+    <>
+      <CommentEditor>
+        <TextArea
+          id="replyComment"
+          placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.'
+          onChange={handleReplyComment}
+        />
+        <Button onClick={onReplyComment}>등록</Button>
+      </CommentEditor>
     </>
 
-)
+  )
 
-// console.log(Number(selectedCommentIndex))
-
-  if(!comments) return;
+  if (!comments) return;
 
   return (
 
     <CommentsListWrapper>
-      {comments?.length>0 ?
+      {comments?.length > 0 ?
         <CommentsTitle><CommentCount>{comments?.length}{" "}</CommentCount>개의 댓글</CommentsTitle>
-      : null}
+        : null}
       <div>
-          {comments?.map((value,index)=>(
+        {comments?.map((value, index) => (
           <CommentsList key={index}>
             {selectedCommentIndex === index ?
-             <>
-             {editComment}
-            </>
-            : 
-            <>
-            <CommentTop>
-              <CommentLeft>
-               <CommentWriter>{value.writer}</CommentWriter>
-               <CommentDate>{dayjs(value.createdAt).format('YYYY.MM.DD HH:mm')}</CommentDate>
-              </CommentLeft>
-              {value.id===userId?   
-              <CommentRight>
-                 <DeleteButton onClick={()=>onDeleteComment(index)}>삭제</DeleteButton>
-                 <UpdateButton onClick={()=>onSelectCommentIndex(index)}>수정</UpdateButton>
-              </CommentRight>
-              :null}
-            </CommentTop>
-            <CommentContent>
-            {value.comment}
-            </CommentContent>
-            <ReplyContent>
-             <ReplyCount>답글{" "}<span>10</span>개{" "}<img src={downArrowImg} alt='down arrow'/></ReplyCount>
-             <p>|</p>
-             <ReplyWrite  onClick={() => {setSelectedReplyIndex(index),
-          !select.includes(value.createdAt)
-            ? setSelect((select) => [...select, value.createdAt])
-            : setSelect(select.filter((button) => button !== value.createdAt));
-        }}>답글쓰기</ReplyWrite>
-            </ReplyContent>
-            <ReplyBox>
-             {select.includes(value.createdAt)
-            ? replyComment
-            : null}
-            </ReplyBox>
-            </>}
+              <>
+                {editComment}
+              </>
+              :
+              <>
+                <CommentTop>
+                  <CommentLeft>
+                    <CommentWriter>{value.writer}</CommentWriter>
+                    <CommentDate>{dayjs(value.createdAt).format('YYYY.MM.DD HH:mm')}</CommentDate>
+                  </CommentLeft>
+                  {value.id === userId ?
+                    <CommentRight>
+                      <DeleteButton onClick={() => onDeleteComment(index)}>삭제</DeleteButton>
+                      <UpdateButton onClick={() => onSelectCommentIndex(index)}>수정</UpdateButton>
+                    </CommentRight>
+                    : null}
+                </CommentTop>
+                <CommentContent>
+                  {value.comment}
+                </CommentContent>
+                <ReplyContent>
+                  <ReplyCount onClick={()=>{
+                    !replyComments.includes(value.reply)
+                    ? setReplyComments((select) => [...select, value.reply])
+                    : setReplyComments(select.filter((button) => button !== value.reply))
+                  }}>답글{" "}<span>{value.reply.length>0 && value.reply.length}</span>개{" "}<img src={downArrowImg} alt='down arrow' /></ReplyCount>
+                  <div>
+                    {replyComments.includes(value.reply)
+              ? replyCommentInput
+              : null}
+                  </div>
+                  <p>|</p>
+                  <ReplyWrite onClick={() => {
+                    setSelectedReplyIndex(index),
+                    !select.includes(value.createdAt)
+                      ? setSelect((select) => [...select, value.createdAt])
+                      : setSelect(select.filter((button) => button !== value.createdAt));
+                  }}>답글쓰기</ReplyWrite>
+                </ReplyContent>
+                <ReplyBox>
+                  {select.includes(value.createdAt)
+                    ? replyCommentInput
+                    : null}
+                </ReplyBox>
+              </>}
           </CommentsList>
-          ))}
+        ))}
+        <div>
+         {comments[0]?.reply.map(reply=>(
+         <CommentList/>
+         ))}
         </div>
+      </div>
     </CommentsListWrapper>
   )
 }
 
 
-CommentList.propTypes={
-  userId:PropTypes.string,
-  comments:PropTypes.array,
-  onDeleteComment:PropTypes.func,
-  onSelectCommentIndex:PropTypes.func,
-  selectedCommentIndex:PropTypes.number,
-  handleComment:PropTypes.func,
-  onEditComment:PropTypes.func,
-  handleReplyComment:PropTypes.func,
-  onReplyComment:PropTypes.func
+CommentList.propTypes = {
+  userId: PropTypes.string,
+  comments: PropTypes.array,
+  onDeleteComment: PropTypes.func,
+  onSelectCommentIndex: PropTypes.func,
+  selectedCommentIndex: PropTypes.number,
+  handleComment: PropTypes.func,
+  onEditComment: PropTypes.func,
+  handleReplyComment: PropTypes.func,
+  onReplyComment: PropTypes.func,
+  setSelectedReplyIndex: PropTypes.func
 }
 
 export default CommentList
@@ -153,7 +168,7 @@ margin-left: 14px;
 color: #aaa;
 font-size: 11px;
 `
-const CommentEditor= styled.div`
+const CommentEditor = styled.div`
 display:grid;
 grid-template-columns:1fr auto;
 align-items:center;

@@ -2,34 +2,34 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types';
 
-const CommentInput = ({handleCommentSubmit,handleComment,comment}) => {
+const CommentInput = ({ handleCommentSubmit, handleComment, comment }) => {
 
   return (
-  <>
-    <form onSubmit={handleCommentSubmit}>
-    <label htmlFor="comment"></label>
-    <CommentEditor>
-    <TextArea 
-       id="comment" 
-       placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.' 
-       onChange={handleComment} 
-       value={comment}/>
-        <Button type='submit'>등록</Button>
-    </CommentEditor>
-   </form>
-  </>
+    <>
+      <form onSubmit={handleCommentSubmit}>
+        <label htmlFor="comment"></label>
+        <CommentEditor>
+          <TextArea
+            id="comment"
+            placeholder='타인을 배려하는 마음을 담아 댓글을 달아주세요.'
+            onChange={handleComment}
+            value={comment} />
+          <Button type='submit'>등록</Button>
+        </CommentEditor>
+      </form>
+    </>
   )
 }
 
-CommentInput.propTypes={
-  handleCommentSubmit:PropTypes.func,
-  handleComment:PropTypes.func,
-  comment:PropTypes.string
+CommentInput.propTypes = {
+  handleCommentSubmit: PropTypes.func,
+  handleComment: PropTypes.func,
+  comment: PropTypes.string
 };
 
 export default CommentInput
 
-const CommentEditor= styled.div`
+const CommentEditor = styled.div`
 display:grid;
 grid-template-columns:1fr auto;
 align-items:center;

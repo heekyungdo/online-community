@@ -9,14 +9,16 @@ import { useSelector } from "react-redux";
 import { doc, updateDoc, getFirestore, deleteDoc, arrayUnion, collection, getDocs, query, orderBy, arrayRemove } from "firebase/firestore";
 import app from "../../utils/firebase";
 import Swal from 'sweetalert2'
+import ReplyComment from "../../components/ReplyComment";
+import Comments from "../../components/Comments";
 
 const Detail = () => {
   const fireStore = getFirestore(app);
-  const {id} = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState({});
-  const postInfo = useSelector((state)=>state.post?.postInfo);
-  const user = useSelector((state)=>state.user?.userData);
+  const postInfo = useSelector((state) => state.post?.postInfo);
+  const user = useSelector((state) => state.user?.userData);
   const currentPost = postInfo[id];
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([])
@@ -24,143 +26,133 @@ const Detail = () => {
   const [selectedCommentIndex, setSelectedCommentIndex] = useState()
   const [selectedReplyIndex, setSelectedReplyIndex] = useState()
 
-  const getPosts = async()=>{
+  // 게시글, 댓글 가져오기
+  const getPosts = async () => {
     const valRef = await collection(fireStore, 'post');
-    const data = await getDocs(query(valRef,orderBy('date')));
-    const allData = data.docs.map(val=>({...val.data(), id:val.id}));
-      setPost(currentPost)
-    const commentsArr =  allData.map(val=>val.comments);
-    if(!commentsArr[id]) return;
-      setComments([...commentsArr[id],...comments])
-   }
+    const data = await getDocs(query(valRef, orderBy('date')));
+    const allData = data.docs.map(val => ({ ...val.data(), id: val.id }));
+    setPost(currentPost)
+    const commentsArr = allData.map(val => val.comments);
+    if (!commentsArr[id]) return;
+    setComments([...commentsArr[id], ...comments])
+  }
 
-  useEffect(()=>{
+  useEffect(() => {
     getPosts();
-  },[])
+  }, [])
 
-  const handleDelete = async (postId)=>{
-Swal.fire({
-  title: "정말 삭제하시겠습니까?",
-  text: "삭제 후에는 복구 하실 수 없습니다.",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "삭제",
-  cancelButtonText:'취소',
-}).then((result) => {
-  if (result.isConfirmed) {
-     deleteDoc(doc(fireStore, "post", postId)).then(()=>{
-      navigate('/community')
-     })
-  }})
+  const handleDelete = async (postId) => {
+    Swal.fire({
+      title: "정말 삭제하시겠습니까?",
+      text: "삭제 후에는 복구 하실 수 없습니다.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "삭제",
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteDoc(doc(fireStore, "post", postId)).then(() => {
+          navigate('/community')
+        })
+      }
+    })
   };
 
   const commentsRef = doc(fireStore, "post", currentPost.id);
   const newComments = [...comments];
 
-  const handleUpdate = ()=>{
-  navigate('/update/'+id)
+  const handleUpdate = () => {
+    navigate('/update/' + id)
   };
 
-  const handleCommentSubmit = async (e) =>{
+  // 댓글 제출
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
 
     const commentInfo = {
-      writer:user.name,
-      id:user.id,
-      createdAt:new Date().toISOString(),
-      comment:comment,
-      reply:[]
+      writer: user.name,
+      id: user.id,
+      createdAt: new Date().toISOString(),
+      comment: comment,
+      reply: []
     };
 
-    if(!comment) return;
+    if (!comment) return;
 
     await updateDoc(commentsRef, {
       comments: arrayUnion(commentInfo)
-  })
-  .then(()=>setComment(''))
-  .then(()=>window.location.reload());
+    })
+      .then(() => setComment(''))
+      .then(() => window.location.reload());
   };
 
-  const handleComment = (e)=>{
+  // 댓글 쓰기
+  const handleComment = (e) => {
     setComment(e.target.value);
- };
-
-
- const onDeleteComment = async (index)=>{
-  if(window.confirm("삭제하시겠습니까?")) {
-    await updateDoc(commentsRef,{
-      comments:arrayRemove(comments[index])
-    }).then(()=>window.location.reload());
-  }
-};
-
-const onSelectCommentIndex = (index) => {
-  setSelectedCommentIndex(index);
-};
-
-const onEditComment = async (index) =>{
-
-  const editedComment ={
-    writer:user.name,
-    id:user.id,
-    createdAt:new Date().toISOString(),
-    comment:comment,
-    reply:[]
   };
-      
-  // firebase에는 배열을 수정하는 기능이 없어서
-  // 해당 index에 수정한 댓글 넣어주고, 기존건 삭제로 구현함
-newComments.splice(index, 0, editedComment);
-  await updateDoc(commentsRef, {
-    comments: newComments
-});
 
-await updateDoc(commentsRef,{
-  comments:arrayRemove(comments[index])
-}).then(()=>window.location.reload());
-};
+  // 댓글 삭제
+  const onDeleteComment = async (index) => {
+    if (window.confirm("삭제하시겠습니까?")) {
+      await updateDoc(commentsRef, {
+        comments: arrayRemove(comments[index])
+      }).then(() => window.location.reload());
+    }
+  };
 
+  const onSelectCommentIndex = (index) => {
+    setSelectedCommentIndex(index);
+  };
 
-const handleReplyComment = (e) => {
-  setReplyComment(e.target.value)
-};
+  // 댓글 수정
+  const onEditComment = async (index) => {
 
-const onReplyComment = async() => {
-  // e.preventDefault();
+    const editedComment = {
+      writer: user.name,
+      id: user.id,
+      createdAt: new Date().toISOString(),
+      comment: comment,
+      reply: []
+    };
 
-  const newComment = newComments[selectedReplyIndex]
-  console.log(selectedReplyIndex)
-
-const commentInfo = newComment.reply.push(
-  { writer:user.name,
-    id:user.id,
-    createdAt:new Date().toISOString(),
-    comment:replyComment,
-  }
-)
-
-  newComments.splice(0, 0, commentInfo);
+    // firebase에는 배열을 수정하는 기능이 없어서
+    // 해당 index에 수정한 댓글 넣어주고, 기존건 삭제로 구현함
+    newComments.splice(index, 0, editedComment);
     await updateDoc(commentsRef, {
       comments: newComments
-  });
-  
-//   await updateDoc(commentsRef,{
-//     comments:arrayRemove(comments[0])
-//   }).then(()=>window.location.reload());
+    });
 
+    await updateDoc(commentsRef, {
+      comments: arrayRemove(comments[index])
+    }).then(() => window.location.reload());
+  };
 
-// console.log('replyRef',replyRef)
-  // if(!comment) return;
+ // 대댓글 쓰기
+  const handleReplyComment = (e) => {
+    setReplyComment(e.target.value)
+  };
 
+  // 대댓글 제출
+  const onReplyComment = async () => {
 
-//   await updateDoc(commentsRef, {
-//     comments: arrayUnion(commentInfo)
-// });
-// .then(()=>setReplyComment(''))
-// .then(()=>window.location.reload());
-};
+    const newComment = newComments[selectedReplyIndex]
+
+    const commentInfo = newComment.reply.push(
+      {
+        writer: user.name,
+        id: user.id,
+        createdAt: new Date().toISOString(),
+        comment: replyComment,
+      }
+    )
+
+    newComments.splice(0, 0, commentInfo);
+    await updateDoc(commentsRef, {
+      comments: newComments
+    });
+  };
 
   return (
     <div>
@@ -174,42 +166,45 @@ const commentInfo = newComment.reply.push(
           </div>
 
           <Contents>
-              {post?.images?.length>0 && post.images.map(image=>(
-                <p key={image}>
-                <Image src={image} alt={image}/>
-                </p>
-              ))}
-          
+            {post?.images?.length > 0 && post.images.map(image => (
+              <p key={image}>
+                <Image src={image} alt={image} />
+              </p>
+            ))}
+
             <p>{post.description}</p>
           </Contents>
         </ContentsWrapper>
       )}
-      {user?.id===post?.userId ?(
-         <ButtonGroup>
-          <ListBtn onClick={()=>navigate('/community')}>목록</ListBtn>
+      {user?.id === post?.userId ? (
+        <ButtonGroup>
+          <ListBtn onClick={() => navigate('/community')}>목록</ListBtn>
           <div>
-            <DeleteBtn onClick={()=>handleDelete(post.id)}>삭제</DeleteBtn>
+            <DeleteBtn onClick={() => handleDelete(post.id)}>삭제</DeleteBtn>
             <UpdateBtn onClick={handleUpdate}>수정</UpdateBtn>
-            </div>
-          </ButtonGroup>
-          ):null}
+          </div>
+        </ButtonGroup>
+      ) : null}
       <CommentTitle>댓글쓰기</CommentTitle>
-      <CommentInput 
-      handleCommentSubmit={handleCommentSubmit} 
-      handleComment={handleComment}
-      comment={comment}/>
-      <CommentList
-      userId={user.id}
-      comments={comments}
-      onDeleteComment={onDeleteComment}
-      onEditComment={onEditComment}
-      handleCommentSubmit={handleCommentSubmit} 
-      handleComment={handleComment}
-      onSelectCommentIndex={onSelectCommentIndex}
-      selectedCommentIndex={Number(selectedCommentIndex)}
-      handleReplyComment={handleReplyComment}
-      onReplyComment={onReplyComment}
-      setSelectedReplyIndex={setSelectedReplyIndex}/>
+      <CommentInput
+        handleCommentSubmit={handleCommentSubmit}
+        handleComment={handleComment}
+        comment={comment} />
+      {/* <CommentList
+        userId={user.id}
+        comments={comments}
+        onDeleteComment={onDeleteComment}
+        onEditComment={onEditComment}
+        handleCommentSubmit={handleCommentSubmit}
+        handleComment={handleComment}
+        onSelectCommentIndex={onSelectCommentIndex}
+        selectedCommentIndex={Number(selectedCommentIndex)}
+        handleReplyComment={handleReplyComment}
+        onReplyComment={onReplyComment}
+        setSelectedReplyIndex={setSelectedReplyIndex} />
+      <ReplyComment
+      comments={comments}/> */}
+      <Comments comments={comments}/>
     </div>
   );
 };
